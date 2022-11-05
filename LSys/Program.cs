@@ -10,7 +10,8 @@ namespace LSys
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHostedService<MQTTService>();
+            builder.Services.AddHostedService<MQTTSubscribeService>();
+            builder.Services.AddHostedService<MQTTPublishService>();
 
             var app = builder.Build();
             
