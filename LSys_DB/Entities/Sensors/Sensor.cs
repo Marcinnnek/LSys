@@ -1,8 +1,8 @@
 ﻿namespace LSys_DB.Entities.Sensors
 {
-    public class Sensor
+    public class Sensor :EntityBase<int>
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string Name { get; set; }
         public string Units { get; set; }
         // Relacja - jedeno urzadzenie ma wiele sensorów

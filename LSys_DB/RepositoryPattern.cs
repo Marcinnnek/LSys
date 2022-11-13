@@ -1,4 +1,5 @@
 ﻿using LSys_DB.Entities;
+using LSys_DB.Entities.Sensors;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,11 @@ using System.Threading.Tasks;
 namespace LSys_DB
 {
     // Testy
-    
+    //Cześć, pytanie z tych głupszych i prosił bym o potwierdzenie moich wywodów.Mam klasę abstrakcyjną EnityBase która jest generyczna Id - Guid lub int, chciałbym z niej dziedziczyć w dwóch klasach w której jedno id było by Guid a w drugiej int. Czy przy takiej konstrukcji jak poniżej będzie to działać we wzorcu repozytorium? Czy jestem zmuszony do wyboru tylko jednego typu danych dla Id? Pozdrawiam.
 
     public abstract class EntityBase<T>
     {
         public T Id { get; set; }
-    }
-
-
-    public class Order : EntityBase<int>
-    {
-        public int Quantity { get; set; }
-        public string ProductName { get; set; }
-        public decimal Price { get; set; }
     }
 
     public interface IGenericRepository<T, N> where T : class
@@ -64,8 +57,9 @@ namespace LSys_DB
     public interface IDeviceRepository : IGenericRepository<Device, Guid>
     {
         // tu wrzucić dodatkowe metody dla danej encji
+        public IEnumerable<Device> GetAllDevices();
     }
-    public interface IUserRepository : IGenericRepository<User, int>
+    public interface ISensorRepository : IGenericRepository<Sensor, int>
     {
         // tu wrzucić dodatkowe metody dla danej encji
     }
@@ -76,9 +70,9 @@ namespace LSys_DB
 
         }
 
-        public IEnumerable<Device> GetDeviceById(Guid id)
+        public IEnumerable<Device> GetAllDevices()
         {
-            return (IEnumerable<Device>)_context.Devices.FirstOrDefaultAsync(x => x.Id == id);
+            return _context.Devices.ToList();
         }
     }
 }
