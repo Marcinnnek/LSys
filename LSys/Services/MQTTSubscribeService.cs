@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
-using Newtonsoft.Json;
 using LSys.DTOs;
 
 namespace LSys.Services

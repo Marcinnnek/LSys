@@ -16,7 +16,8 @@ namespace LSys_DB.Entities
         public string MQTTId{ get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public ICollection<Device> Devices { get; set; }
+        public Device Device { get; set; }
+
 
     }
 }

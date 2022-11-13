@@ -1,4 +1,6 @@
 ﻿using LSys_DB.Entities;
+using LSys_DB.Entities.Schedulers;
+using LSys_DB.Entities.Sensors;
 using Microsoft.EntityFrameworkCore;
 // psql pass: BazaMarcinka
 namespace LSys_DB
@@ -9,27 +11,110 @@ namespace LSys_DB
         {
 
         }
+
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<DeviceType> DeviceTypes { get; set; }
         public DbSet<WiFiCredentials> WiFiCredentials { get; set; }
         public DbSet<MQTTCredentials> MQTTCredentials { get; set; }
-        public DbSet<LuxSensor> LuxSensors { get; set; }
-        public DbSet<LuxSensorData> LuxSensorDatas { get; set; }
-        public DbSet<EnvironmentSensor> EnvironmentSensors { get; set; }
-        public DbSet<EnivronmentSensorData> EnvironmentSensorDatas { get; set; }
+        public DbSet<Sensor> Sensors { get; set; }
+        public DbSet<Readings> Readings { get; set; }
+        public DbSet<SensorSettings> SensorSettings { get; set; }
+        public DbSet<Dimmer> Dimmers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(U =>
+            modelBuilder.Entity<User>(EB =>
             {
-                U.HasOne(R => R.Role).WithMany().HasForeignKey(R => R.RoleId); //Użytkownik ma jedną rolę, jedna rola może być przypisana do wielu użtkowników.
+                // User - Role, Many to Many
+                EB.HasMany(U => U.Roles)
+                .WithMany(R => R.Users) // prosta konfiguracja bez widocznej tabeli pośredniej
+                .UsingEntity<UserRoleList>( // dodatkowa konfiguracja z tabelą pośrednią tak aby mozna było dodać dodatkowe dane w tej tablei jeśli zajdzie potrzeba
+                    U => U.HasOne(UR => UR.Role)
+                    .WithMany()
+                    .HasForeignKey(UR => UR.RoleId),
+
+                    U => U.HasOne(UR => UR.User)
+                    .WithMany()
+                    .HasForeignKey(UR => UR.UserId),
+
+                    UR =>
+                    {
+                        UR.HasKey(x => new { x.UserId, x.RoleId }); // klucze główne dla tabeli pośredniej
+                    });
             });
 
-            modelBuilder.Entity<Device>(D => 
+            // User - Device, Many to Many
+            modelBuilder.Entity<Device>(EB =>
             {
-                D.HasOne(U => U.User).WithMany().HasForeignKey(U => U.UserId); //Jedno urządzenie ma wielu użytkowników
+                EB.HasMany(D => D.Users)
+                .WithMany(U => U.Devices) // prosta konfiguracja bez widocznej tabeli pośredniej
+                .UsingEntity<UserDeviceList>( // dodatkowa konfiguracja z tabelą pośrednią tak aby mozna było dodać dodatkowe dane w tej tablei jeśli zajdzie potrzeba
+                    D => D.HasOne(UD => UD.User)
+                    .WithMany()
+                    .HasForeignKey(UD => UD.UserId),
+
+                    D => D.HasOne(UD => UD.Device)
+                    .WithMany()
+                    .HasForeignKey(UD => UD.DeviceId),
+
+                    UD =>
+                    {
+                        UD.HasKey(x => new { x.UserId, x.DeviceId }); // klucze główne dla tabeli pośredniej
+                    });
+            });
+
+            // Device - WiFiCredentials, One to Many - Jedna konfiguracja wifi może mieć przypisanych wiele urządzeń
+            modelBuilder.Entity<WiFiCredentials>(EB =>
+            {
+                EB.HasMany(WiFiC => WiFiC.Devices) // Wiązanie od strony tabeli WiFi
+                .WithOne(D => D.WiFiCredentials)
+                .HasForeignKey(D => D.WiFiCredentialsId);
+
+                //EB.HasOne(D => D.WiFiCredentials) // Wiązanaie od strony tabeli Device
+                //.WithMany(WiFiC => WiFiC.Devices)
+                //.HasForeignKey(D=>D.WiFiCredentialsId);
+            });
+
+            // Device - MQTTCredentials, One to One - Jedna konfiguracja MQTT może mieć przypisanych jedno urządzenie
+            modelBuilder.Entity<MQTTCredentials>(EB =>
+            {
+                EB.HasOne(MQTTC => MQTTC.Device) // Wiązanie od strony MQTT
+                .WithOne(D => D.MQTTCredentials)
+                .HasForeignKey<Device>(D => D.MQTTCredentialsId);
+
+                //EB.HasOne(D => D.MQTTCredentials) // Wiązanie od strony Device
+                //.WithOne(MQTTC => MQTTC.Device)
+                //.HasForeignKey<MQTTCredentials>(MQTTC => MQTTC.MQTTId);
+            });
+
+            modelBuilder.Entity<Sensor>(EB =>
+            {
+                EB.HasOne(S => S.Device)
+                .WithMany(D => D.Sensors)
+                .HasForeignKey(S => S.DeviceId);
+            });
+
+            modelBuilder.Entity<Readings>(EB =>
+            {
+                EB.HasOne(R => R.Sensor)
+                .WithMany(S => S.Readings)
+                .HasForeignKey(R => R.SensorId);
+            });
+
+            modelBuilder.Entity<SensorSettings>(EB =>
+            {
+                EB.HasOne(SS => SS.Sensor)
+                .WithOne(S => S.SensorSettings)
+                .HasForeignKey<Sensor>(S => S.SensorSettingsId);
+            });
+
+            modelBuilder.Entity<Dimmer>(EB =>
+            {
+                EB.HasOne(Dim => Dim.Device)
+                .WithMany(D => D.Dimmers)
+                .HasForeignKey(Dim => Dim.DeviceId);
             });
         }
     }

@@ -10,8 +10,9 @@ namespace LSys_DB.Entities
     public class Role
     {
         [Column("RoleId")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
+        //public Guid UserId { get; set; }
+        public List<User> Users { get; set; }
     }
 }
