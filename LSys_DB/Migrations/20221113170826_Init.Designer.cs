@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSys_DB.Migrations
 {
     [DbContext(typeof(LSysDbContext))]
-    [Migration("20221113142811_Init")]
+    [Migration("20221113170826_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,7 @@ namespace LSys_DB.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeviceId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -59,12 +58,26 @@ namespace LSys_DB.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("LSys_DB.Entities.Dimmers.DimmerSchedulerList", b =>
+                {
+                    b.Property<int>("SchedulerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DimmerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SchedulerId", "DimmerId");
+
+                    b.HasIndex("DimmerId");
+
+                    b.ToTable("DimmerSchedulerList");
+                });
+
             modelBuilder.Entity("LSys_DB.Entities.MQTTCredentials", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("MQTTCredentialsId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -93,7 +106,97 @@ namespace LSys_DB.Migrations
                     b.ToTable("MQTTCredentials");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.Readings", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("LSys_DB.Entities.Schedulers.Dimmer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("State")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("Dimmers");
+                });
+
+            modelBuilder.Entity("LSys_DB.Entities.Schedulers.Scheduler", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FrequencyInterval")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FrequencyType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("SetValue")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("State")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("TimeOfDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAd")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schedulers");
+                });
+
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.Readings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,23 +220,7 @@ namespace LSys_DB.Migrations
                     b.ToTable("Readings");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("RoleId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("LSys_DB.Entities.Sensor", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.Sensor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +252,7 @@ namespace LSys_DB.Migrations
                     b.ToTable("Sensors");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.SensorSettings", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.SensorSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -194,8 +281,7 @@ namespace LSys_DB.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -252,8 +338,7 @@ namespace LSys_DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("WiFiCredentialsId");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
@@ -301,9 +386,39 @@ namespace LSys_DB.Migrations
                     b.Navigation("WiFiCredentials");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.Readings", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Dimmers.DimmerSchedulerList", b =>
                 {
-                    b.HasOne("LSys_DB.Entities.Sensor", "Sensor")
+                    b.HasOne("LSys_DB.Entities.Schedulers.Dimmer", "Dimmer")
+                        .WithMany()
+                        .HasForeignKey("DimmerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LSys_DB.Entities.Schedulers.Scheduler", "Scheduler")
+                        .WithMany()
+                        .HasForeignKey("SchedulerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dimmer");
+
+                    b.Navigation("Scheduler");
+                });
+
+            modelBuilder.Entity("LSys_DB.Entities.Schedulers.Dimmer", b =>
+                {
+                    b.HasOne("LSys_DB.Entities.Device", "Device")
+                        .WithMany("Dimmers")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.Readings", b =>
+                {
+                    b.HasOne("LSys_DB.Entities.Sensors.Sensor", "Sensor")
                         .WithMany("Readings")
                         .HasForeignKey("SensorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -312,7 +427,7 @@ namespace LSys_DB.Migrations
                     b.Navigation("Sensor");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.Sensor", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.Sensor", b =>
                 {
                     b.HasOne("LSys_DB.Entities.Device", "Device")
                         .WithMany("Sensors")
@@ -320,9 +435,9 @@ namespace LSys_DB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LSys_DB.Entities.SensorSettings", "SensorSettings")
+                    b.HasOne("LSys_DB.Entities.Sensors.SensorSettings", "SensorSettings")
                         .WithOne("Sensor")
-                        .HasForeignKey("LSys_DB.Entities.Sensor", "SensorSettingsId")
+                        .HasForeignKey("LSys_DB.Entities.Sensors.Sensor", "SensorSettingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -371,6 +486,8 @@ namespace LSys_DB.Migrations
 
             modelBuilder.Entity("LSys_DB.Entities.Device", b =>
                 {
+                    b.Navigation("Dimmers");
+
                     b.Navigation("Sensors");
                 });
 
@@ -380,12 +497,12 @@ namespace LSys_DB.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.Sensor", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.Sensor", b =>
                 {
                     b.Navigation("Readings");
                 });
 
-            modelBuilder.Entity("LSys_DB.Entities.SensorSettings", b =>
+            modelBuilder.Entity("LSys_DB.Entities.Sensors.SensorSettings", b =>
                 {
                     b.Navigation("Sensor")
                         .IsRequired();

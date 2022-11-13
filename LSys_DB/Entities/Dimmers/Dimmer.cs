@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LSys_DB.Entities.Schedulers
+﻿namespace LSys_DB.Entities.Schedulers
 {
     public class Dimmer
     {
@@ -13,5 +7,7 @@ namespace LSys_DB.Entities.Schedulers
         public bool State { get; set; }
         public Guid DeviceId { get; set; }
         public Device Device{ get; set; }
+        public List<Scheduler> Schedulers { get; set; }
+
     }
 }

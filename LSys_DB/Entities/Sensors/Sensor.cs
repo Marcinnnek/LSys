@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LSys_DB.Entities.Sensors
+﻿namespace LSys_DB.Entities.Sensors
 {
     public class Sensor
     {

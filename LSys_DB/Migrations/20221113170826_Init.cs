@@ -13,7 +13,7 @@ namespace LSys_DB.Migrations
                 name: "MQTTCredentials",
                 columns: table => new
                 {
-                    MQTTCredentialsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ServerIp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Port = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -23,19 +23,43 @@ namespace LSys_DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MQTTCredentials", x => x.MQTTCredentialsId);
+                    table.PrimaryKey("PK_MQTTCredentials", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.RoleId);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedulers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    State = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FrequencyType = table.Column<int>(type: "int", nullable: false),
+                    FrequencyInterval = table.Column<int>(type: "int", nullable: false),
+                    TimeOfDay = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ActionType = table.Column<int>(type: "int", nullable: false),
+                    SetValue = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedulers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +82,7 @@ namespace LSys_DB.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -66,14 +90,14 @@ namespace LSys_DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "WiFiCredentials",
                 columns: table => new
                 {
-                    WiFiCredentialsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SSID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -83,7 +107,7 @@ namespace LSys_DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WiFiCredentials", x => x.WiFiCredentialsId);
+                    table.PrimaryKey("PK_WiFiCredentials", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,13 +124,13 @@ namespace LSys_DB.Migrations
                         name: "FK_UserRoleList_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "RoleId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRoleList_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -114,7 +138,7 @@ namespace LSys_DB.Migrations
                 name: "Devices",
                 columns: table => new
                 {
-                    DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -123,18 +147,39 @@ namespace LSys_DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Devices", x => x.DeviceId);
+                    table.PrimaryKey("PK_Devices", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Devices_MQTTCredentials_MQTTCredentialsId",
                         column: x => x.MQTTCredentialsId,
                         principalTable: "MQTTCredentials",
-                        principalColumn: "MQTTCredentialsId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Devices_WiFiCredentials_WiFiCredentialsId",
                         column: x => x.WiFiCredentialsId,
                         principalTable: "WiFiCredentials",
-                        principalColumn: "WiFiCredentialsId",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dimmers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<float>(type: "real", nullable: false),
+                    State = table.Column<bool>(type: "bit", nullable: false),
+                    DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dimmers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dimmers_Devices_DeviceId",
+                        column: x => x.DeviceId,
+                        principalTable: "Devices",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -156,7 +201,7 @@ namespace LSys_DB.Migrations
                         name: "FK_Sensors_Devices_DeviceId",
                         column: x => x.DeviceId,
                         principalTable: "Devices",
-                        principalColumn: "DeviceId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sensors_SensorSettings_SensorSettingsId",
@@ -180,13 +225,37 @@ namespace LSys_DB.Migrations
                         name: "FK_UserDeviceList_Devices_DeviceId",
                         column: x => x.DeviceId,
                         principalTable: "Devices",
-                        principalColumn: "DeviceId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserDeviceList_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DimmerSchedulerList",
+                columns: table => new
+                {
+                    DimmerId = table.Column<int>(type: "int", nullable: false),
+                    SchedulerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DimmerSchedulerList", x => new { x.SchedulerId, x.DimmerId });
+                    table.ForeignKey(
+                        name: "FK_DimmerSchedulerList_Dimmers_DimmerId",
+                        column: x => x.DimmerId,
+                        principalTable: "Dimmers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DimmerSchedulerList_Schedulers_SchedulerId",
+                        column: x => x.SchedulerId,
+                        principalTable: "Schedulers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -223,6 +292,16 @@ namespace LSys_DB.Migrations
                 column: "WiFiCredentialsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Dimmers_DeviceId",
+                table: "Dimmers",
+                column: "DeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DimmerSchedulerList_DimmerId",
+                table: "DimmerSchedulerList",
+                column: "DimmerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Readings_SensorId",
                 table: "Readings",
                 column: "SensorId");
@@ -252,6 +331,9 @@ namespace LSys_DB.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "DimmerSchedulerList");
+
+            migrationBuilder.DropTable(
                 name: "Readings");
 
             migrationBuilder.DropTable(
@@ -259,6 +341,12 @@ namespace LSys_DB.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoleList");
+
+            migrationBuilder.DropTable(
+                name: "Dimmers");
+
+            migrationBuilder.DropTable(
+                name: "Schedulers");
 
             migrationBuilder.DropTable(
                 name: "Sensors");

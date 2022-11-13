@@ -1,4 +1,5 @@
 ﻿using LSys_DB.Entities;
+using LSys_DB.Entities.Dimmers;
 using LSys_DB.Entities.Schedulers;
 using LSys_DB.Entities.Sensors;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace LSys_DB
         public DbSet<Readings> Readings { get; set; }
         public DbSet<SensorSettings> SensorSettings { get; set; }
         public DbSet<Dimmer> Dimmers { get; set; }
+        public DbSet<Scheduler> Schedulers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -93,7 +95,8 @@ namespace LSys_DB
             {
                 EB.HasOne(S => S.Device)
                 .WithMany(D => D.Sensors)
-                .HasForeignKey(S => S.DeviceId);
+                .HasForeignKey(S => S.DeviceId)
+                .HasPrincipalKey(S => S.Id); // może być ale nie musi, EF sam wnioskuje jeśli jest kolumna Id
             });
 
             modelBuilder.Entity<Readings>(EB =>
@@ -115,6 +118,25 @@ namespace LSys_DB
                 EB.HasOne(Dim => Dim.Device)
                 .WithMany(D => D.Dimmers)
                 .HasForeignKey(Dim => Dim.DeviceId);
+            });
+
+            modelBuilder.Entity<Scheduler>(EB =>
+            {
+                EB.HasMany(S => S.Dimmers)
+                .WithMany(D => D.Schedulers)
+                .UsingEntity<DimmerSchedulerList>(
+                     S => S.HasOne(DS => DS.Dimmer)
+                    .WithMany()
+                    .HasForeignKey(DS => DS.DimmerId),
+
+                    S => S.HasOne(DS => DS.Scheduler)
+                    .WithMany()
+                    .HasForeignKey(DS => DS.SchedulerId),
+
+                    DS =>
+                    {
+                        DS.HasKey(x => new { x.SchedulerId, x.DimmerId });
+                    });
             });
         }
     }

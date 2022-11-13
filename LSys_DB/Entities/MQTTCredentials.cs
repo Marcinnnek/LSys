@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LSys_DB.Entities
 {
     public class MQTTCredentials
     {
-        [Column("MQTTCredentialsId")]
         public int Id { get; set; }
         public string ServerIp { get; set; }
         public string Port { get; set; }
