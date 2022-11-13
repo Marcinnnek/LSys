@@ -14,7 +14,7 @@ namespace LSys
             builder.Services.AddControllersWithViews();
             builder.Services.AddHostedService<MQTTSubscribeService>();
             builder.Services.AddHostedService<MQTTPublishService>();
-            builder.Services.AddDbContext<LSysDbContext>(options => 
+            builder.Services.AddDbContext<LSysDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });

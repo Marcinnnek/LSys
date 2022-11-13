@@ -1,4 +1,5 @@
 ﻿using RabbitMQ.Client;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
 
@@ -6,6 +7,10 @@ namespace LSys.Services
 {
     public class MQTTPublishService : BackgroundService
     {
+
+
+
+
         private IServiceProvider _sp;
         private ConnectionFactory _connectionFactory;
         private IConnection _connection;
@@ -45,28 +50,37 @@ namespace LSys.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (true)
+
+            var startTimeSpan = TimeSpan.Zero;
+            var periodTimeSpan = TimeSpan.FromSeconds(5);
+
+            var timer = new System.Threading.Timer((e) =>
             {
-                Thread.Sleep(5000);
-                if (stoppingToken.IsCancellationRequested)
-                {
-                    _channel.Dispose();
-                    _connection.Dispose();
-
-                    return Task.CompletedTask;
-                }
+                PublishMessage().Wait();
+            }, null, startTimeSpan, periodTimeSpan);
 
 
-                string message = "Message published on C# client!";
-                var body = Encoding.UTF8.GetBytes(message);
+            if (stoppingToken.IsCancellationRequested)
+            {
+                _channel.Dispose();
+                _connection.Dispose();
 
-                _channel.BasicPublish(exchange: exchangeName,
-                                     routingKey: deviceRoutingKey,
-                                     basicProperties: null,
-                                     body: body);
+                return Task.CompletedTask;
             }
+
             return Task.CompletedTask;
 
+        }
+
+        private async Task PublishMessage()
+        {
+            string message = "Message published on C# client!";
+            var body = Encoding.UTF8.GetBytes(message);
+
+            _channel.BasicPublish(exchange: exchangeName,
+                                 routingKey: deviceRoutingKey,
+                                 basicProperties: null,
+                                 body: body);
         }
     }
 }
