@@ -4,9 +4,9 @@ using LSys_DB.Entities.Sensors;
 
 namespace LSys_DB.Entities
 {
-    public class Device
+    public class Device : EntityBase<Guid>
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
         public string Name { get; set; }
         public string ?Description { get; set; }
         public string ?Location { get; set; }

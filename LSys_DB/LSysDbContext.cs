@@ -27,6 +27,8 @@ namespace LSys_DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Role>().Property(R => R.Name).HasMaxLength(20).IsRequired();
+
             modelBuilder.Entity<User>(EB =>
             {
                 // User - Role, Many to Many
@@ -45,6 +47,11 @@ namespace LSys_DB
                     {
                         UR.HasKey(x => new { x.UserId, x.RoleId }); // klucze główne dla tabeli pośredniej
                     });
+
+                EB.Property(U => U.Email).HasMaxLength(25).IsRequired();
+                EB.Property(U => U.Login).HasMaxLength(20).IsRequired();
+                EB.Property(U => U.Password).IsRequired();
+                EB.Property(U => U.Description).HasMaxLength(250).IsRequired();
             });
 
             // User - Device, Many to Many
@@ -65,6 +72,12 @@ namespace LSys_DB
                     {
                         UD.HasKey(x => new { x.UserId, x.DeviceId }); // klucze główne dla tabeli pośredniej
                     });
+
+                EB.Property(D => D.Name).HasMaxLength(20);
+                EB.Property(D => D.Description).HasMaxLength(250);
+                EB.Property(D => D.Location).HasMaxLength(20);
+                EB.Property(D => D.Group).HasMaxLength(10);
+
             });
 
             // Device - WiFiCredentials, One to Many - Jedna konfiguracja wifi może mieć przypisanych wiele urządzeń
@@ -77,6 +90,12 @@ namespace LSys_DB
                 //EB.HasOne(D => D.WiFiCredentials) // Wiązanaie od strony tabeli Device
                 //.WithMany(WiFiC => WiFiC.Devices)
                 //.HasForeignKey(D=>D.WiFiCredentialsId);
+
+                EB.Property(WiFiC=>WiFiC.SSID).HasMaxLength(30);
+                EB.Property(WiFiC=>WiFiC.DeviceIP).HasMaxLength(15);
+                EB.Property(WiFiC=>WiFiC.GateWay).HasMaxLength(15);
+                EB.Property(WiFiC=>WiFiC.ResetPassword).HasMaxLength(20);
+
             });
 
             // Device - MQTTCredentials, One to One - Jedna konfiguracja MQTT może mieć przypisanych jedno urządzenie
@@ -89,6 +108,14 @@ namespace LSys_DB
                 //EB.HasOne(D => D.MQTTCredentials) // Wiązanie od strony Device
                 //.WithOne(MQTTC => MQTTC.Device)
                 //.HasForeignKey<MQTTCredentials>(MQTTC => MQTTC.MQTTId);
+
+                EB.Property(MQTTC => MQTTC.ServerIp).HasMaxLength(15);
+                EB.Property(MQTTC => MQTTC.Port).HasMaxLength(5);
+                EB.Property(MQTTC => MQTTC.MQTTId).HasMaxLength(36);
+                EB.Property(MQTTC => MQTTC.Login).HasMaxLength(20);
+
+
+                
             });
 
             modelBuilder.Entity<Sensor>(EB =>
@@ -97,6 +124,9 @@ namespace LSys_DB
                 .WithMany(D => D.Sensors)
                 .HasForeignKey(S => S.DeviceId)
                 .HasPrincipalKey(S => S.Id); // może być ale nie musi, EF sam wnioskuje jeśli jest kolumna Id
+
+                EB.Property(S=>S.Name).HasMaxLength(20);
+                EB.Property(S=>S.Units).HasMaxLength(20).IsRequired();
             });
 
             modelBuilder.Entity<Readings>(EB =>
@@ -137,6 +167,11 @@ namespace LSys_DB
                     {
                         DS.HasKey(x => new { x.SchedulerId, x.DimmerId });
                     });
+
+                EB.Property(Sch => Sch.Name).HasMaxLength(50);
+                EB.Property(Sch => Sch.Description).HasMaxLength(250);
+
+                
             });
         }
     }
