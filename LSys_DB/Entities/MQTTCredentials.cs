@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LSys_DB.Entities
+namespace LSys_Domain.Entities
 {
-    public class MQTTCredentials
+    public class MQTTCredentials : EntityBase<int>
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string ServerIp { get; set; }
         public string Port { get; set; }
         public string MQTTId { get; set; }

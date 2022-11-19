@@ -1,10 +1,11 @@
-﻿using LSys_DB.Entities;
-using LSys_DB.Entities.Dimmers;
-using LSys_DB.Entities.Schedulers;
-using LSys_DB.Entities.Sensors;
+﻿using LSys_Domain.Entities;
+using LSys_Domain.Entities.Dimmers;
+using LSys_Domain.Entities.Schedulers;
+using LSys_Domain.Entities.Sensors;
 using Microsoft.EntityFrameworkCore;
+
 // psql pass: BazaMarcinka
-namespace LSys_DB
+namespace LSys_Domain
 {
     public class LSysDbContext : DbContext
     {
@@ -49,9 +50,10 @@ namespace LSys_DB
                     });
 
                 EB.Property(U => U.Email).HasMaxLength(25).IsRequired();
-                EB.Property(U => U.Login).HasMaxLength(20).IsRequired();
+                EB.HasIndex(U => new { U.Email, U.UserName }).IsUnique(true);
+                EB.Property(U => U.UserName).HasMaxLength(20).IsRequired();
                 EB.Property(U => U.Password).IsRequired();
-                EB.Property(U => U.Description).HasMaxLength(250).IsRequired();
+                EB.Property(U => U.Description).HasMaxLength(250);
             });
 
             // User - Device, Many to Many
@@ -91,10 +93,11 @@ namespace LSys_DB
                 //.WithMany(WiFiC => WiFiC.Devices)
                 //.HasForeignKey(D=>D.WiFiCredentialsId);
 
-                EB.Property(WiFiC=>WiFiC.SSID).HasMaxLength(30);
-                EB.Property(WiFiC=>WiFiC.DeviceIP).HasMaxLength(15);
-                EB.Property(WiFiC=>WiFiC.GateWay).HasMaxLength(15);
-                EB.Property(WiFiC=>WiFiC.ResetPassword).HasMaxLength(20);
+                EB.Property(WiFiC => WiFiC.SSID).HasMaxLength(30);
+                EB.Property(WiFiC => WiFiC.DeviceIP).HasMaxLength(15);
+                EB.HasIndex(WiFiC => WiFiC.DeviceIP).IsUnique(true);
+                EB.Property(WiFiC => WiFiC.GateWay).HasMaxLength(15);
+                EB.Property(WiFiC => WiFiC.ResetPassword).HasMaxLength(20);
 
             });
 
@@ -115,7 +118,7 @@ namespace LSys_DB
                 EB.Property(MQTTC => MQTTC.Login).HasMaxLength(20);
 
 
-                
+
             });
 
             modelBuilder.Entity<Sensor>(EB =>
@@ -125,8 +128,8 @@ namespace LSys_DB
                 .HasForeignKey(S => S.DeviceId)
                 .HasPrincipalKey(S => S.Id); // może być ale nie musi, EF sam wnioskuje jeśli jest kolumna Id
 
-                EB.Property(S=>S.Name).HasMaxLength(20);
-                EB.Property(S=>S.Units).HasMaxLength(20).IsRequired();
+                EB.Property(S => S.Name).HasMaxLength(20);
+                EB.Property(S => S.Units).HasMaxLength(20).IsRequired();
             });
 
             modelBuilder.Entity<Readings>(EB =>
@@ -171,7 +174,7 @@ namespace LSys_DB
                 EB.Property(Sch => Sch.Name).HasMaxLength(50);
                 EB.Property(Sch => Sch.Description).HasMaxLength(250);
 
-                
+
             });
         }
     }

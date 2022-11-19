@@ -1,4 +1,4 @@
-﻿namespace LSys_DB.Entities
+﻿namespace LSys_Domain.Entities
 {
     public class UserDeviceList
     {

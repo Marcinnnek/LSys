@@ -1,4 +1,4 @@
-﻿namespace LSys_DB.Entities
+﻿namespace LSys_Domain.Entities
 {
     public class UserRoleList //Użyto tabeli łączącej ze względu na mozliwość dodania dodatkowych infomracji np data dodania relacji do tabeli
     {

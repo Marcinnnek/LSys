@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LSys_DB.Entities
+namespace LSys_Domain.Entities
 {
-    public class User
+    public class User :EntityBase<Guid>
     {
-        public Guid Id { get; set; }
-        public string Login { get; set; }
+        //public Guid Id { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
         public string ?Description { get; set; }
         public string Email { get; set; }

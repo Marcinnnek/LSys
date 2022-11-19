@@ -1,4 +1,4 @@
-﻿namespace LSys_Common
+﻿namespace LSys_Domain.Enums
 {
     public enum FrequencyType
     {

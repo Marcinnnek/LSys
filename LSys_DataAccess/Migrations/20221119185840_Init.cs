@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LSys_DB.Migrations
+namespace LSys_DataAccess.Migrations
 {
     public partial class Init : Migration
     {
@@ -15,10 +15,10 @@ namespace LSys_DB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ServerIp = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Port = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MQTTId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServerIp = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Port = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
+                    MQTTId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -31,7 +31,7 @@ namespace LSys_DB.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,15 +45,15 @@ namespace LSys_DB.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     State = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FrequencyType = table.Column<int>(type: "int", nullable: false),
-                    FrequencyInterval = table.Column<int>(type: "int", nullable: false),
-                    TimeOfDay = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FrequencyInterval = table.Column<int>(type: "int", nullable: true),
+                    TimeOfDay = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ActionType = table.Column<int>(type: "int", nullable: false),
                     SetValue = table.Column<float>(type: "real", nullable: false)
                 },
@@ -83,10 +83,10 @@ namespace LSys_DB.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,11 +99,11 @@ namespace LSys_DB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SSID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SSID = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeviceIP = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GateWay = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResetPassword = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DeviceIP = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    GateWay = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    ResetPassword = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -139,9 +139,10 @@ namespace LSys_DB.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Group = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     WiFiCredentialsId = table.Column<int>(type: "int", nullable: false),
                     MQTTCredentialsId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -189,8 +190,8 @@ namespace LSys_DB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Units = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Units = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SensorSettingsId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -326,6 +327,18 @@ namespace LSys_DB.Migrations
                 name: "IX_UserRoleList_RoleId",
                 table: "UserRoleList",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email_UserName",
+                table: "Users",
+                columns: new[] { "Email", "UserName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WiFiCredentials_DeviceIP",
+                table: "WiFiCredentials",
+                column: "DeviceIP",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -1,6 +1,6 @@
-﻿namespace LSys_DB.Entities.Sensors
+﻿namespace LSys_Domain.Entities.Sensors
 {
-    public class Sensor :EntityBase<int>
+    public class Sensor : EntityBase<int>
     {
         //public int Id { get; set; }
         public string Name { get; set; }

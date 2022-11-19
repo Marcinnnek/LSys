@@ -1,0 +1,12 @@
+﻿using LSys_DataAccess.Repository_Interfaces;
+
+namespace LSys_DataAccess.UOW
+{
+    public interface IUnitOfWork : IDisposable
+    {
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
+        IUserRoleRepository UsersRoles { get; }
+        Task<int> Complete();
+    }
+}
