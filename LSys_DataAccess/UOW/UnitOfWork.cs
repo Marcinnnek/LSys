@@ -1,4 +1,5 @@
-﻿using LSys_DataAccess.Repository;
+﻿using AutoMapper;
+using LSys_DataAccess.Repository;
 using LSys_DataAccess.Repository_Interfaces;
 using LSys_Domain;
 
@@ -7,12 +8,15 @@ namespace LSys_DataAccess.UOW
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LSysDbContext _dbContext;
-        public UnitOfWork(LSysDbContext _DbContext)
+        private readonly IMapper _mapper;
+
+        public UnitOfWork(LSysDbContext _DbContext, IMapper mapper)
         {
             _dbContext = _DbContext;
-            Users = new UserRepository(_dbContext);
-            Roles = new RoleRepository(_dbContext);
-            UsersRoles = new UserRoleRepository(_dbContext);
+            _mapper = mapper;
+            Users = new UserRepository(_dbContext, _mapper);
+            Roles = new RoleRepository(_dbContext, _mapper);
+            UsersRoles = new UserRoleRepository(_dbContext, _mapper);
         }
         public IUserRepository Users { get; private set; }
         public IRoleRepository Roles { get; private set; }

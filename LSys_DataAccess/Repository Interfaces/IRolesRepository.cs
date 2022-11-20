@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LSys_DataAccess.DTOs;
 
 namespace LSys_DataAccess.Repository_Interfaces
 {
-    public interface IRoleRepository : IRepository<Role, Guid>
+    public interface IRoleRepository : IRepository<Role, RoleDTO, Guid>
     {
-        public IEnumerable<Role> GetRoles();
+        public IEnumerable<RoleDTO> GetRoles();
     }
 }
 

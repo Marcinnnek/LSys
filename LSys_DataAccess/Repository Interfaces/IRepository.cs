@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace LSys_DataAccess.Repository_Interfaces
 {
-    public interface IRepository<T, N> where T : class
+    public interface IRepository<TResult, TInput, N> where TResult : class where TInput : class // TInput - Domain // TResult - DTO
     {
-        T GetById(N id);
-        List<T> GetRange(Expression<Func<T, bool>> predicate);
-        void Add(T entity);
-        void Update(T entity);
-        void Remove(T entity);
+        TInput GetById(N id);
+        List<TInput> GetRange(Expression<Func<TResult, bool>> predicate);
+        void Add(TInput entity);
+        void Update(TInput entity);
+        void Remove(TInput entity);
     }
 }

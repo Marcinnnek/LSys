@@ -20,7 +20,7 @@ namespace LSys
             builder.Services.AddHostedService<MQTTSubscribeService>();
             builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            //builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             //builder.Services.AddDbContext<LSysDbContext>(options =>
             //{
             //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

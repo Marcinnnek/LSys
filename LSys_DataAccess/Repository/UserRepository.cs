@@ -8,12 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LSys_DataAccess.Repository;
+using LSys_DataAccess.DTOs;
+using System.Linq.Expressions;
+using AutoMapper;
 
 namespace LSys_DataAccess.Repository
 {
-    public class UserRepository : Repository<User, Guid>, IUserRepository
+    public class UserRepository : Repository<User, UserDTO, Guid>, IUserRepository
     {
-        public UserRepository(LSysDbContext _DbContext) : base(_DbContext)
+        public UserRepository(LSysDbContext _DbContext, IMapper mapper) : base(_DbContext, mapper)
         {
         }
 
@@ -23,6 +26,15 @@ namespace LSys_DataAccess.Repository
             return result.Count() > 0 ? true : false;
         }
 
-        // Dodać metody rozszerzające w razie potrzeby
+
+        //public async Task<TResult> Get<TResult>(Guid userId, Expression<Func<LSys_Domain.Entities.User, TResult>> selector) // tu fajne
+        //{
+        //    var result = await _dbContext.Users
+        //        .Where(x => x.Id == userId)
+        //        .Select(selector)
+        //        .SingleOrDefaultAsync();
+        //    return result;
+        //}
+
     }
 }

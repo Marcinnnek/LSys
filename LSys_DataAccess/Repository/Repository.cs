@@ -1,4 +1,5 @@
-﻿using LSys_DataAccess.Repository_Interfaces;
+﻿using AutoMapper;
+using LSys_DataAccess.Repository_Interfaces;
 using LSys_Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,37 +11,41 @@ using System.Threading.Tasks;
 
 namespace LSys_DataAccess.Repository
 {
-    public class Repository<T,  N> : IRepository<T, N> where T : class
+    public class Repository<TResult, TInput, TId> : IRepository<TResult, TInput, TId> where TResult : class where TInput : class // TInput - DTO // TResult - Domain
     {
         protected readonly LSysDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public Repository(LSysDbContext _DbContext)
+        public Repository(LSysDbContext _DbContext, IMapper mapper)
         {
             _dbContext = _DbContext;
+            _mapper = mapper;
         }
 
-        public void Add(T entity)
+        public void Add(TInput entity)
         {
-            _dbContext.Set<T>().Add(entity);
+            TResult result = _mapper.Map<TResult>(entity);
+            _dbContext.Set<TResult>().Add(result);
         }
 
-        public T GetById(N id)
+        public TInput GetById(TId id)
         {
-            return _dbContext.Set<T>().Find(id);
+            return _mapper.Map<TInput>(_dbContext.Set<TResult>().Find(id));
         }
 
-        public List<T> GetRange(Expression<Func<T, bool>> predicate)
+        public List<TInput> GetRange(Expression<Func<TResult, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
 
-        public void Remove(T entity)
+        public void Remove(TInput entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            TResult result = _mapper.Map<TResult>(entity);
+            _dbContext.Set<TResult>().Remove(result);
         }
 
-        public void Update(T entity)
+        public void Update(TInput entity)
         {
             throw new NotImplementedException();
         }
