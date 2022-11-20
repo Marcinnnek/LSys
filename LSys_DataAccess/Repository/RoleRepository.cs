@@ -9,13 +9,9 @@ namespace LSys_DataAccess.Repository
 {
     public class RoleRepository : Repository<Role, RoleDTO, Guid>, IRoleRepository
     {
-        private readonly LSysDbContext _dbContext;
-        private readonly IMapper _mapper;
-
         public RoleRepository(LSysDbContext _DbContext, IMapper mapper) : base(_DbContext, mapper)
         {
-            _dbContext = _DbContext;
-            _mapper = mapper;
+
         }
 
         public IEnumerable<RoleDTO> GetRoles()

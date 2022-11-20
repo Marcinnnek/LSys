@@ -11,7 +11,7 @@ namespace LSys_DataAccess.Repository_Interfaces
     {
         TInput GetById(N id);
         List<TInput> GetRange(Expression<Func<TResult, bool>> predicate);
-        void Add(TInput entity);
+        object Add(TInput entity);
         void Update(TInput entity);
         void Remove(TInput entity);
     }

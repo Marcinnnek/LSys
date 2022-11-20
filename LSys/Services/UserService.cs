@@ -28,17 +28,13 @@ namespace LSys.Services
                     Description = userVM.Description,
                 };
 
-                //                INSERT INTO[Users] ([Id], [Description], [Email], [Password], [UserName])
-                //                VALUES(NEWID(), 'description test', 'mzuziak@gmail.com', 'passwordtest', 'Marcin');
-
                 var hashedPassword = _passwordHasher.HashPassword(newUser, userVM.Password);
                 newUser.Password = hashedPassword;
 
                 var roles = _unitOfWork.Roles.GetRoles().FirstOrDefault(r => r.Name == "User");
-                //Role roles = null;
 
-                _unitOfWork.Users.Add(newUser);
-                if (roles == null)
+                newUser.Id =  (Guid)_unitOfWork.Users.Add(newUser); //tutaj user ma Id = 0, w funkcji add ma wygenerowane Id, nie jest "zwracane" do tego obiektu
+                if (roles != null)
                 {
                     _unitOfWork.UsersRoles.Add(new UserRoleListDTO { RoleId = roles.Id, UserId = newUser.Id });
                 }
@@ -60,11 +56,5 @@ namespace LSys.Services
                 return false;
             }
         }
-
-        //public async Task <bool> DeleteUser()
-        //{
-        //    bool result = false;
-        //    return result;
-        //}
     }
 }
