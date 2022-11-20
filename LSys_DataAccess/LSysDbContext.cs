@@ -52,7 +52,7 @@ namespace LSys_Domain
                 EB.Property(U => U.Email).HasMaxLength(25).IsRequired();
                 EB.HasIndex(U => new { U.Email, U.UserName }).IsUnique(true);
                 EB.Property(U => U.UserName).HasMaxLength(20).IsRequired();
-                EB.Property(U => U.Password).IsRequired();
+                EB.Property(U => U.PasswordHash).IsRequired();
                 EB.Property(U => U.Description).HasMaxLength(250);
             });
 

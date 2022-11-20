@@ -1,6 +1,6 @@
-﻿namespace LSys.DTOs
+﻿namespace LSys.View_Models
 {
-    public class UserVM
+    public class RegisterUserVM
     {
         public string UserName { get; set; }
         public string Email { get; set; }

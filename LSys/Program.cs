@@ -1,9 +1,13 @@
+using LSys.Middleware;
 using LSys.Services;
 using LSys_DataAccess;
 using LSys_DataAccess.Repository;
 using LSys_Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LSys
 {
@@ -11,25 +15,50 @@ namespace LSys
     {
         public static void Main(string[] args)
         {
+            var authenticationSettings = new AuthenticationSettings();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddSingleton(authenticationSettings);
+            builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer, //wydawca tokenu
+                    ValidAudience = authenticationSettings.JwtIssuer, // jakie podmioty mog¹ u¿ywaæ tokenu (ta sama wartoœæ bo generujemy token w obrêbie aplikacji)
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+                };
+            });
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddControllers();
             builder.Services.AddScoped<LSysDbSeeder>();
             builder.Services.AddHostedService<MQTTSubscribeService>();
             builder.Services.AddHostedService<MQTTPublishService>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            //builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            //builder.Services.AddDbContext<LSysDbContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            //});
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddDataAccessEFServices(builder.Configuration); // Dodanie serwisów z warstwy DataAccess
+
+            builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+            builder.Services.AddHttpContextAccessor(); // potem do UserContextService
 
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("FrontEndClient", builderCORS =>
+                builderCORS.AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithOrigins(builder.Configuration["AllowedOrigins"]));
+            });
+
             var app = builder.Build();
+            app.UseResponseCaching();
+            app.UseCors("FrontEndClient");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -47,7 +76,8 @@ namespace LSys
                 var seeder = scope.ServiceProvider.GetRequiredService<LSysDbSeeder>();
                 seeder.Seed();
             }
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseAuthentication(); // wymuszenie autentykacji JWT
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -55,7 +85,7 @@ namespace LSys
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LSys API"));
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

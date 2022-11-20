@@ -20,13 +20,18 @@ namespace LSys_DataAccess.Repository
         {
         }
 
-        public bool CheckUserExist(string phrase)
+        public bool CheckUserExist(string email)
         {
-            var result = _dbContext.Users.Where(u => u.Email == phrase).AsNoTracking();
+            var result = _dbContext.Users.Where(u => u.Email == email).AsNoTracking();
             return result.Count() > 0 ? true : false;
         }
 
-
+        public UserDTO GetUserWithRoles(string email)
+        {
+            var entity = _dbContext.Users.Include(u => u.Roles).FirstOrDefault(e => e.Email == email);
+            var result =_mapper.Map<UserDTO>(entity);
+            return result;
+        }
         //public async Task<TResult> Get<TResult>(Guid userId, Expression<Func<LSys_Domain.Entities.User, TResult>> selector) // tu fajne
         //{
         //    var result = await _dbContext.Users

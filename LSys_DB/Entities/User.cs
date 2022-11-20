@@ -6,7 +6,7 @@ namespace LSys_Domain.Entities
     {
         //public Guid Id { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public string ?Description { get; set; }
         public string Email { get; set; }
         // Relacja wiele do wielu do User-Role

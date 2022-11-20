@@ -11,7 +11,8 @@ namespace LSys_DataAccess.Repository_Interfaces
 {
     public interface IUserRepository : IRepository<User, UserDTO, Guid>
     {
-        public bool CheckUserExist(string phrase);
-        //public User NewUser(UserDTO userDTO);
+        public bool CheckUserExist(string email);
+        public UserDTO GetUserWithRoles(string email);
+
     }
 }
