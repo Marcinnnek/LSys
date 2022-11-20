@@ -29,17 +29,6 @@ namespace LSys_DataAccess.Repository
             TResult result = _mapper.Map<TResult>(entity);
             _dbContext.Set<TResult>().Add(result);
 
-            //Type resultType = result.GetType();
-            //PropertyInfo propInfo = resultType.GetProperty(nameof(EntityBase<TId>.Id));
-            //object? propValue;
-            //if (propInfo != null)
-            //{
-            //    return propValue = propInfo.GetValue(result, null);
-            //}
-            //else
-            //{
-            //    return null;
-            //}
             return GetIdFromObj(result);
         }
 

@@ -1,4 +1,5 @@
 ﻿using LSys.DTOs;
+using LSys.Exceptions;
 using LSys.View_Models;
 using LSys_DataAccess.DTOs;
 using LSys_DataAccess.Repository;
@@ -70,14 +71,14 @@ namespace LSys.Services
 
             if (user == null)
             {
-                throw new BadHttpRequestException("Invalid username or password");
+                throw new BadRequestException("Invalid username or password");
             }
 
             var verifyPassword = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginVM.Password);
 
             if (verifyPassword == PasswordVerificationResult.Failed)
             {
-                throw new BadHttpRequestException("Invalid username or password");
+                throw new BadRequestException("Invalid username or password");
             }
             var userRoles = user.Roles;
             var claims = new List<Claim>()
