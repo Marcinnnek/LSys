@@ -15,7 +15,7 @@ namespace LSys_Domain.Entities
         public WiFiCredentials? WiFiCredentials { get; set; }
         public Guid? MQTTCredentialsId { get; set; }
         public MQTTCredentials? MQTTCredentials { get; set; }
-        public List<User>? Users { get; set; }
+        public List<AppUser>? Users { get; set; }
         public List<Sensor>? Sensors { get; set; }
         public List<Dimmer>? Dimmers { get; set; }
     }

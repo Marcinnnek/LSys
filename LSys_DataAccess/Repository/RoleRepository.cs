@@ -4,10 +4,11 @@ using LSys_DataAccess.Repository_Interfaces;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using LSys_DataAccess.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace LSys_DataAccess.Repository
 {
-    public class RoleRepository : Repository<Role, RoleDTO, Guid>, IRoleRepository
+    public class RoleRepository : Repository<IdentityRole, RoleDTO, Guid>, IRoleRepository
     {
         public RoleRepository(LSysDbContext _DbContext, IMapper mapper) : base(_DbContext, mapper)
         {
@@ -16,7 +17,7 @@ namespace LSys_DataAccess.Repository
 
         public IEnumerable<RoleDTO> GetRoles()
         {
-            var roles = _mapper.Map<IEnumerable<Role>, IEnumerable<RoleDTO>>(_dbContext.Roles.AsNoTracking().AsEnumerable());
+            var roles = _mapper.Map<IEnumerable<IdentityRole>, IEnumerable<RoleDTO>>(_dbContext.Roles.AsNoTracking().AsEnumerable());
             return roles;
         }
 

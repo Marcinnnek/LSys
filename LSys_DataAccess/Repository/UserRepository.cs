@@ -14,7 +14,7 @@ using AutoMapper;
 
 namespace LSys_DataAccess.Repository
 {
-    public class UserRepository : Repository<User, UserDTO, Guid>, IUserRepository
+    public class UserRepository : Repository<AppUser, UserDTO, Guid>, IUserRepository
     {
         public UserRepository(LSysDbContext _DbContext, IMapper mapper) : base(_DbContext, mapper)
         {
@@ -26,12 +26,12 @@ namespace LSys_DataAccess.Repository
             return result.Count() > 0 ? true : false;
         }
 
-        public UserDTO GetUserWithRoles(string email)
-        {
-            var entity = _dbContext.Users.Include(u => u.Roles).FirstOrDefault(e => e.Email == email);
-            var result =_mapper.Map<UserDTO>(entity);
-            return result;
-        }
+        //public UserDTO GetUserWithRoles(string email)
+        //{
+        //    var entity = _dbContext.Users.Include(u => u.Roles).FirstOrDefault(e => e.Email == email);
+        //    var result =_mapper.Map<UserDTO>(entity);
+        //    return result;
+        //}
         //public async Task<TResult> Get<TResult>(Guid userId, Expression<Func<LSys_Domain.Entities.User, TResult>> selector) // tu fajne
         //{
         //    var result = await _dbContext.Users

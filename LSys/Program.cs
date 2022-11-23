@@ -2,7 +2,8 @@ using LSys.Middleware;
 using LSys.Services;
 using LSys_DataAccess;
 using LSys_DataAccess.Repository;
-using LSys_Domain.Entities;
+using LSys_Domain;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,9 @@ namespace LSys
            // var authenticationSettings = new AuthenticationSettings();
 
             var builder = WebApplication.CreateBuilder(args);
+
+
+            builder.Services.AddAuthorization();
 
             // Add services to the container.
             //builder.Services.AddSingleton(authenticationSettings);
@@ -49,17 +53,13 @@ namespace LSys
 
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("FrontEndClient", builderCORS =>
-                builderCORS.AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithOrigins(builder.Configuration["AllowedOrigins"]));
-            });
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSession();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             var app = builder.Build();
             app.UseResponseCaching();
-            app.UseCors("FrontEndClient");
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

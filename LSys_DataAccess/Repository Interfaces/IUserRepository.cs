@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace LSys_DataAccess.Repository_Interfaces
 {
-    public interface IUserRepository : IRepository<User, UserDTO, Guid>
+    public interface IUserRepository : IRepository<AppUser, UserDTO, Guid>
     {
         public bool CheckUserExist(string email);
-        public UserDTO GetUserWithRoles(string email);
+        //public UserDTO GetUserWithRoles(string email);
 
     }
 }

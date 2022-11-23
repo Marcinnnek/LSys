@@ -32,7 +32,8 @@ namespace LSys.Controllers
         [HttpPost("LoginUser")]
         public async Task<IActionResult> LoginUser([FromBody] LoginUserVM loginVM)
         {
-            var token = await _userService.LoginUserAndGenrateJWTToken(loginVM);
+            //var token = await _userService.LoginUserAndGenrateJWTToken(loginVM);
+            var token = "test";
             if (token != null)
             {
                 return Ok(token);// Created

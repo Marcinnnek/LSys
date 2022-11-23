@@ -27,13 +27,13 @@ namespace LSys_DataAccess
              });
 
             services.AddScoped(typeof(IRepository<,,>), typeof(Repository<,,>));
-
-            services.AddScoped<IPasswordHasher<UserDTO>, PasswordHasher<UserDTO>>();
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<LSysDbContext>();
+            //services.AddScoped<IPasswordHasher<UserDTO>, PasswordHasher<UserDTO>>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

@@ -20,7 +20,7 @@ namespace LSys_DataAccess.DTOs
         public WiFiCredentialsDTO WiFiCredentials { get; set; }
         public Guid? MQTTCredentialsId { get; set; }
         public MQTTCredentialsDTO MQTTCredentials { get; set; }
-        public List<UserDTO> Users { get; set; }
+        //public List<UserDTO> Users { get; set; }
         public List<SensorDTO> Sensors { get; set; }
         public List<DimmerDTO> Dimmers { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using LSys_Domain;
 using LSys_Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace LSys
 {
@@ -25,21 +26,24 @@ namespace LSys
             }
         }
 
-        private IEnumerable<Role> GetRoles()
+        private IEnumerable<IdentityRole> GetRoles()
         {
-            var roles = new List<Role>()
+            var roles = new List<IdentityRole>()
             {
-                new Role()
+                new IdentityRole()
                 {
-                    Name = "Admin"
+                    Name="Spectator",
+                    NormalizedName= "Spectator".ToUpper(),
                 },
-                new Role()
+                new IdentityRole()
                 {
-                    Name="User"
+                    Name="User",
+                    NormalizedName= "User".ToUpper(),
                 },
-                new Role()
+                new IdentityRole()
                 {
-                    Name="Spectator"
+                    Name = "Admin",
+                    NormalizedName= "Admin".ToUpper(),
                 },
 
             };

@@ -2,20 +2,21 @@
 using LSys_Domain.Entities.Dimmers;
 using LSys_Domain.Entities.Schedulers;
 using LSys_Domain.Entities.Sensors;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 // psql pass: BazaMarcinka
 namespace LSys_Domain
 {
-    public class LSysDbContext : DbContext
+    public class LSysDbContext : IdentityDbContext<AppUser>
     {
         public LSysDbContext(DbContextOptions<LSysDbContext> options) : base(options)
         {
 
         }
 
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<User> Users { get; set; }
+        //public DbSet<Role> Roles { get; set; }
+        //public DbSet<AppUser> Users { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<WiFiCredentials> WiFiCredentials { get; set; }
         public DbSet<MQTTCredentials> MQTTCredentials { get; set; }
@@ -28,33 +29,34 @@ namespace LSys_Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Role>().Property(R => R.Name).HasMaxLength(20).IsRequired();
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<Role>().Property(R => R.Name).HasMaxLength(20).IsRequired();
 
-            modelBuilder.Entity<User>(EB =>
-            {
-                // User - Role, Many to Many
-                EB.HasMany(U => U.Roles)
-                .WithMany(R => R.Users) // prosta konfiguracja bez widocznej tabeli pośredniej
-                .UsingEntity<UserRoleList>( // dodatkowa konfiguracja z tabelą pośrednią tak aby mozna było dodać dodatkowe dane w tej tablei jeśli zajdzie potrzeba
-                    U => U.HasOne(UR => UR.Role)
-                    .WithMany()
-                    .HasForeignKey(UR => UR.RoleId),
+            //modelBuilder.Entity<AppUser>(EB =>
+            //{
+            //    // User - Role, Many to Many
+            //    EB.HasMany(U => U.Roles)
+            //    .WithMany(R => R.Users) // prosta konfiguracja bez widocznej tabeli pośredniej
+            //    .UsingEntity<UserRoleList>( // dodatkowa konfiguracja z tabelą pośrednią tak aby mozna było dodać dodatkowe dane w tej tablei jeśli zajdzie potrzeba
+            //        U => U.HasOne(UR => UR.Role)
+            //        .WithMany()
+            //        .HasForeignKey(UR => UR.RoleId),
 
-                    U => U.HasOne(UR => UR.User)
-                    .WithMany()
-                    .HasForeignKey(UR => UR.UserId),
+            //        U => U.HasOne(UR => UR.User)
+            //        .WithMany()
+            //        .HasForeignKey(UR => UR.UserId),
 
-                    UR =>
-                    {
-                        UR.HasKey(x => new { x.UserId, x.RoleId }); // klucze główne dla tabeli pośredniej
-                    });
+            //        UR =>
+            //        {
+            //            UR.HasKey(x => new { x.UserId, x.RoleId }); // klucze główne dla tabeli pośredniej
+            //        });
 
-                EB.Property(U => U.Email).HasMaxLength(25).IsRequired();
-                EB.HasIndex(U => new { U.Email, U.UserName }).IsUnique(true);
-                EB.Property(U => U.UserName).HasMaxLength(20).IsRequired();
-                EB.Property(U => U.PasswordHash).IsRequired();
-                EB.Property(U => U.Description).HasMaxLength(250);
-            });
+            //    EB.Property(U => U.Email).HasMaxLength(25).IsRequired();
+            //    EB.HasIndex(U => new { U.Email, U.UserName }).IsUnique(true);
+            //    EB.Property(U => U.UserName).HasMaxLength(20).IsRequired();
+            //    EB.Property(U => U.PasswordHash).IsRequired();
+            //    EB.Property(U => U.Description).HasMaxLength(250);
+            //});
 
             // User - Device, Many to Many
             modelBuilder.Entity<Device>(EB =>
@@ -89,7 +91,7 @@ namespace LSys_Domain
                 .WithOne(D => D.WiFiCredentials)
                 .HasForeignKey(D => D.WiFiCredentialsId)
                 .HasPrincipalKey(W => W.Id);
-                
+
 
                 //EB.HasOne(D => D.WiFiCredentials) // Wiązanaie od strony tabeli Device
                 //.WithMany(WiFiC => WiFiC.Devices)

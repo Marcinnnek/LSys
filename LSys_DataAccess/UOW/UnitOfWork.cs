@@ -17,13 +17,13 @@ namespace LSys_DataAccess.UOW
             _mapper = mapper;
             Users = new UserRepository(_dbContext, _mapper);
             Roles = new RoleRepository(_dbContext, _mapper);
-            UsersRoles = new UserRoleRepository(_dbContext, _mapper);
+            //UsersRoles = new UserRoleRepository(_dbContext, _mapper);
             Devices = new DeviceRepository(_dbContext, _mapper);
             WiFiCredentials = new WiFiCredentialsRepository(_dbContext, _mapper);
         }
         public IUserRepository Users { get; private set; }
         public IRoleRepository Roles { get; private set; }
-        public IUserRoleRepository UsersRoles { get; private set; }
+        //public IUserRoleRepository UsersRoles { get; private set; }
         public IDeviceRepository Devices{ get; private set; }
         public IWiFiCredentialsRepository WiFiCredentials { get; private set; }
 
