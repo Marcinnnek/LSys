@@ -87,12 +87,14 @@ namespace LSys_Domain
             {
                 EB.HasMany(WiFiC => WiFiC.Devices) // Wiązanie od strony tabeli WiFi
                 .WithOne(D => D.WiFiCredentials)
-                .HasForeignKey(D => D.WiFiCredentialsId);
+                .HasForeignKey(D => D.WiFiCredentialsId)
+                .HasPrincipalKey(W => W.Id);
+                
 
                 //EB.HasOne(D => D.WiFiCredentials) // Wiązanaie od strony tabeli Device
                 //.WithMany(WiFiC => WiFiC.Devices)
                 //.HasForeignKey(D=>D.WiFiCredentialsId);
-
+                //EB.Property(WiFiC=> WiFiC.Id).UseIdentityColumn();
                 EB.Property(WiFiC => WiFiC.SSID).HasMaxLength(30);
                 EB.Property(WiFiC => WiFiC.DeviceIP).HasMaxLength(15);
                 EB.HasIndex(WiFiC => WiFiC.DeviceIP).IsUnique(true);

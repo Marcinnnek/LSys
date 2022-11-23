@@ -11,6 +11,8 @@ namespace LSys_DataAccess.MappingDTOs
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Role, RoleDTO>().ReverseMap();
             CreateMap<UserRoleList, UserRoleListDTO>().ReverseMap();
+            CreateMap<Device, DeviceDTO>().ReverseMap();
+            CreateMap<WiFiCredentials, WiFiCredentialsDTO>().ReverseMap();
         }
     }
 }

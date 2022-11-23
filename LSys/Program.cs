@@ -40,6 +40,7 @@ namespace LSys
             builder.Services.AddHostedService<MQTTSubscribeService>();
             builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IDeviceService, DeviceService>();
             builder.Services.AddDataAccessEFServices(builder.Configuration); // Dodanie serwisów z warstwy DataAccess
 
             builder.Services.AddScoped<ErrorHandlingMiddleware>();

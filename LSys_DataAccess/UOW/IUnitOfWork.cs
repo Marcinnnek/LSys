@@ -7,6 +7,8 @@ namespace LSys_DataAccess.UOW
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
         IUserRoleRepository UsersRoles { get; }
+        IDeviceRepository Devices { get; }
+        IWiFiCredentialsRepository WiFiCredentials{ get; }
         Task<int> Complete();
     }
 }

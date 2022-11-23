@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSys_DataAccess.Migrations
 {
     [DbContext(typeof(LSysDbContext))]
-    [Migration("20221120200750_ChangedUserEntity")]
-    partial class ChangedUserEntity
+    [Migration("20221122212109_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,23 +42,22 @@ namespace LSys_DataAccess.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("MQTTCredentialsId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid?>("MQTTCredentialsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("WiFiCredentialsId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<Guid?>("WiFiCredentialsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MQTTCredentialsId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MQTTCredentialsId] IS NOT NULL");
 
                     b.HasIndex("WiFiCredentialsId");
 
@@ -82,11 +81,9 @@ namespace LSys_DataAccess.Migrations
 
             modelBuilder.Entity("LSys_Domain.Entities.MQTTCredentials", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -356,11 +353,9 @@ namespace LSys_DataAccess.Migrations
 
             modelBuilder.Entity("LSys_Domain.Entities.WiFiCredentials", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DeviceIP")
                         .IsRequired()
@@ -397,15 +392,11 @@ namespace LSys_DataAccess.Migrations
                 {
                     b.HasOne("LSys_Domain.Entities.MQTTCredentials", "MQTTCredentials")
                         .WithOne("Device")
-                        .HasForeignKey("LSys_Domain.Entities.Device", "MQTTCredentialsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LSys_Domain.Entities.Device", "MQTTCredentialsId");
 
                     b.HasOne("LSys_Domain.Entities.WiFiCredentials", "WiFiCredentials")
                         .WithMany("Devices")
-                        .HasForeignKey("WiFiCredentialsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WiFiCredentialsId");
 
                     b.Navigation("MQTTCredentials");
 

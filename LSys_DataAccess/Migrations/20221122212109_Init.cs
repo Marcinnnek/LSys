@@ -13,8 +13,7 @@ namespace LSys_DataAccess.Migrations
                 name: "MQTTCredentials",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ServerIp = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Port = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
                     MQTTId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
@@ -84,7 +83,7 @@ namespace LSys_DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
@@ -97,8 +96,7 @@ namespace LSys_DataAccess.Migrations
                 name: "WiFiCredentials",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SSID = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeviceIP = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
@@ -143,8 +141,8 @@ namespace LSys_DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Group = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    WiFiCredentialsId = table.Column<int>(type: "int", nullable: false),
-                    MQTTCredentialsId = table.Column<int>(type: "int", nullable: false)
+                    WiFiCredentialsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MQTTCredentialsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -153,14 +151,12 @@ namespace LSys_DataAccess.Migrations
                         name: "FK_Devices_MQTTCredentials_MQTTCredentialsId",
                         column: x => x.MQTTCredentialsId,
                         principalTable: "MQTTCredentials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Devices_WiFiCredentials_WiFiCredentialsId",
                         column: x => x.WiFiCredentialsId,
                         principalTable: "WiFiCredentials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -285,7 +281,8 @@ namespace LSys_DataAccess.Migrations
                 name: "IX_Devices_MQTTCredentialsId",
                 table: "Devices",
                 column: "MQTTCredentialsId",
-                unique: true);
+                unique: true,
+                filter: "[MQTTCredentialsId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_WiFiCredentialsId",
