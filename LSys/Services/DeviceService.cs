@@ -37,17 +37,6 @@ namespace LSys.Services
         {
             if (deviceId != null || wifiVM != null)
             {
-
-                var device = _unitOfWork.Devices.GetDeviceByIdAsNoTracking(deviceId);
-                List  <DeviceDTO>  devices= new List<DeviceDTO>() ;
-                DeviceDTO newDevice = new DeviceDTO()
-                {
-                    Name = "deviceVM.Name",
-                    Description = "deviceVM.Description",
-                    Location = "deviceVM.Location",
-                    Group = "dev",
-                };
-                //devices.Add(newDevice);
                 WiFiCredentialsDTO newWiFiC = new WiFiCredentialsDTO()
                 {
                     SSID = wifiVM.SSID,
@@ -55,15 +44,10 @@ namespace LSys.Services
                     DeviceIP = wifiVM.DeviceIP,
                     GateWay = wifiVM.GateWay,
                     ResetPassword = wifiVM.ResetPassword,
-                    //Devices = devices
                 };
 
+                newWiFiC.Id = (Guid)_unitOfWork.WiFiCredentials.Add(newWiFiC);
 
-                //newDevice.WiFiCredentials = newWiFiC;
-                //newDevice.Id= (Guid)_unitOfWork.Devices.Add(newDevice);
-                newWiFiC.Id = (int)_unitOfWork.WiFiCredentials.Add(newWiFiC);
-
-                device.WiFiCredentialsId = newWiFiC.Id;
             }
             var result = await _unitOfWork.Complete();
             return result > 0 ? true : false;

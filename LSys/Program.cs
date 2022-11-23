@@ -15,24 +15,24 @@ namespace LSys
     {
         public static void Main(string[] args)
         {
-            var authenticationSettings = new AuthenticationSettings();
+           // var authenticationSettings = new AuthenticationSettings();
 
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton(authenticationSettings);
-            builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
-            {
-                cfg.RequireHttpsMetadata = false;
-                cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidIssuer = authenticationSettings.JwtIssuer, //wydawca tokenu
-                    ValidAudience = authenticationSettings.JwtIssuer, // jakie podmioty mog¹ u¿ywaæ tokenu (ta sama wartoœæ bo generujemy token w obrêbie aplikacji)
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-                };
-            });
+            //builder.Services.AddSingleton(authenticationSettings);
+            //builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
+            //{
+            //    cfg.RequireHttpsMetadata = false;
+            //    cfg.SaveToken = true;
+            //    cfg.TokenValidationParameters = new TokenValidationParameters()
+            //    {
+            //        ValidIssuer = authenticationSettings.JwtIssuer, //wydawca tokenu
+            //        ValidAudience = authenticationSettings.JwtIssuer, // jakie podmioty mog¹ u¿ywaæ tokenu (ta sama wartoœæ bo generujemy token w obrêbie aplikacji)
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+            //    };
+            //});
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddControllers();
