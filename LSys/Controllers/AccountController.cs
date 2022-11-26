@@ -7,42 +7,67 @@ using System.Text.Json.Serialization;
 
 namespace LSys.Controllers
 {
-    public class AccountController : ControllerBase
+    
+    public class AccountController : Controller
     {
-        // private readonly IUnitOfWork _unitOfWork;
         private readonly IAccountService _userService;
         public AccountController(IAccountService userService)
         {
             _userService = userService;
-            // _unitOfWork = unitOfWork;
         }
 
-        [HttpPost("RegisterUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserVM registerVM)
+        [HttpGet]
+        public async Task<IActionResult> RegisterUser()
+        {
+
+            return View(new RegisterUserVM());
+        }
+
+        [HttpPost("[controller]/RegisterUser")]
+        public async Task<IActionResult> RegisterUser([FromForm] RegisterUserVM registerVM)
         {
             if (ModelState.IsValid)
             {
                 var result = await _userService.RegisterUser(registerVM);
-                return StatusCode(201); // Created
+                if (result)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                return View(registerVM);
             }
 
-            return NoContent();
+            return View(registerVM);
         }
 
-        [HttpPost("LoginUser")]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUserVM loginVM)
+        [HttpGet]
+        public async Task<IActionResult> LogInUser()
         {
-            //var token = await _userService.LoginUserAndGenrateJWTToken(loginVM);
-            var token = "test";
-            if (token != null)
+            return View(new LoginUserVM());
+        }
+
+
+        [HttpPost("[controller]/LoginUser")]
+        public async Task<IActionResult> LogInUser([FromForm] LoginUserVM loginVM)
+        {
+            if (ModelState.IsValid)
             {
-                return Ok(token);// Created
-            }
-            else
-            {
-                return NoContent();
+                var result = await _userService.LogInUser(loginVM);
+                if (result)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                return View(loginVM);
             }
 
+            return View(loginVM);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await _userService.LogOutUser();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

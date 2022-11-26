@@ -23,31 +23,24 @@ namespace LSys
 
             builder.Services.AddAuthorization();
 
-            // Add services to the container.
-            //builder.Services.AddSingleton(authenticationSettings);
-            //builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
-            //{
-            //    cfg.RequireHttpsMetadata = false;
-            //    cfg.SaveToken = true;
-            //    cfg.TokenValidationParameters = new TokenValidationParameters()
-            //    {
-            //        ValidIssuer = authenticationSettings.JwtIssuer, //wydawca tokenu
-            //        ValidAudience = authenticationSettings.JwtIssuer, // jakie podmioty mog¹ u¿ywaæ tokenu (ta sama wartoœæ bo generujemy token w obrêbie aplikacji)
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-            //    };
-            //});
-
             builder.Services.AddControllersWithViews();
             builder.Services.AddControllers();
             builder.Services.AddScoped<LSysDbSeeder>();
-            builder.Services.AddHostedService<MQTTSubscribeService>();
-            builder.Services.AddHostedService<MQTTPublishService>();
+            //builder.Services.AddHostedService<MQTTSubscribeService>();
+            //builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
             builder.Services.AddDataAccessEFServices(builder.Configuration); // Dodanie serwisów z warstwy DataAccess
+            builder.Services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric= false;
+                opt.Password.RequireDigit= false;
+                opt.Password.RequiredLength=0;
+            });
 
-            builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            //builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
             builder.Services.AddHttpContextAccessor(); // potem do UserContextService
 
@@ -64,9 +57,6 @@ namespace LSys
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                var scope = app.Services.CreateScope();
-                var seeder = scope.ServiceProvider.GetRequiredService<LSysDbSeeder>();
-                seeder.Seed();
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -77,22 +67,27 @@ namespace LSys
                 var seeder = scope.ServiceProvider.GetRequiredService<LSysDbSeeder>();
                 seeder.Seed();
             }
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseAuthentication(); // wymuszenie autentykacji JWT
+            //app.UseMiddleware<ErrorHandlingMiddleware>();
+            
+
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LSys API"));
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LSys API"));
-
             app.UseRouting();
-            
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
 
             app.MapControllers();
 

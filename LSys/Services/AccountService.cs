@@ -4,10 +4,13 @@ using LSys.View_Models;
 using LSys_DataAccess.DTOs;
 using LSys_DataAccess.Repository;
 using LSys_DataAccess.UOW;
+//using LSys_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
 
@@ -16,55 +19,62 @@ namespace LSys.Services
     public class AccountService : IAccountService
     {
         private readonly IUnitOfWork _unitOfWork;
+        //private readonly UserManager<AppUser> _userManager;
+        //private readonly SignInManager<AppUser> _signInManager;
+
         //private readonly AuthenticationSettings _authenticationSettings;
 
-        public AccountService(IUnitOfWork unitOfWork)
+        public AccountService(IUnitOfWork unitOfWork) //, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager
         {
             _unitOfWork = unitOfWork;
+            //_userManager = userManager;
+            //_signInManager = signInManager;
         }
 
-        public async Task<bool> RegisterUser(RegisterUserVM userVM)
+
+
+        public async Task<bool> RegisterUser(RegisterUserVM registerVM)
         {
-            //if (!_unitOfWork.Users.CheckUserExist(userVM.Email))
-            //{
-            //    UserDTO newUser = new UserDTO() // dodać automappera
-            //    {
-            //        UserName = userVM.UserName,
-            //        Email = userVM.Email,
-            //        Description = userVM.Description,
-            //    };
+            //var user = await _userManager.FindByNameAsync(registerVM.Email);
 
-            //    var hashedPassword = _passwordHasher.HashPassword(newUser, userVM.Password);
-            //    newUser.PasswordHash = hashedPassword;
+            var user = await _unitOfWork.Users.CheckUserExist(registerVM.Email);
+            if (user != null)
+            {
+                return false;
+            }
+            var newUser = new UserDTO
+            {
+                Email = registerVM.Email,
+                UserName = registerVM.Email,
+                PasswordHash = registerVM.Password
+            };
 
-            //    var roles = _unitOfWork.Roles.GetRoles().FirstOrDefault(r => r.Name == "User");
-            //    newUser.Id = (Guid)_unitOfWork.Users.Add(newUser); // UserDTO.Id Fixed
+            bool result = await _unitOfWork.Users.CreateUserAsync(newUser);
 
-            //    if (roles != null)
-            //    {
-            //        _unitOfWork.UsersRoles.Add(new UserRoleListDTO { RoleId = roles.Id, UserId = newUser.Id });
-            //    }
-            //    else
-            //    {
-            //        RoleDTO newRole = new RoleDTO()
-            //        {
-            //            Name = "User"
-            //        };
-            //        _unitOfWork.Roles.Add(newRole);
-            //        _unitOfWork.UsersRoles.Add(new UserRoleListDTO { RoleId = newRole.Id, UserId = newUser.Id });
-            //    }
+            return result;
+        }
 
-            //    var result = await _unitOfWork.Complete();
-            //    return result > 0 ? true : false;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
+
+        public async Task<bool> LogInUser(LoginUserVM loginVM)
+        {
+            var user = await _unitOfWork.Users.CheckUserExist(loginVM.Email);
+            if (user != null)
+            {
+                var passwordCheck = await _unitOfWork.Users.CheckUserPassword(loginVM.Password, user);
+                if (passwordCheck == true)
+                {
+                    var logInResult = await _unitOfWork.Users.SignInUser(loginVM.Password, user);
+                    return logInResult.Succeeded ? true : false;
+                }
+            }
             return true;
         }
 
-       
+        public async Task LogOutUser()
+        {
+            await _unitOfWork.Users.LogOutUser();
+        }
+
     }
 
 
