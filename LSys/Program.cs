@@ -1,5 +1,8 @@
+using FluentValidation;
 using LSys.Middleware;
 using LSys.Services;
+using LSys.View_Models;
+using LSys.View_Models.Validators;
 using LSys_DataAccess;
 using LSys_DataAccess.Repository;
 using LSys_Domain;
@@ -9,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace LSys
 {
@@ -16,28 +21,37 @@ namespace LSys
     {
         public static void Main(string[] args)
         {
-           // var authenticationSettings = new AuthenticationSettings();
+            // var authenticationSettings = new AuthenticationSettings();
 
             var builder = WebApplication.CreateBuilder(args);
 
 
             builder.Services.AddAuthorization();
-
             builder.Services.AddControllersWithViews();
-            builder.Services.AddControllers();
-            builder.Services.AddScoped<LSysDbSeeder>();
+
+            // Fluent validation
+            builder.Services.AddFluentValidationAutoValidation(); 
+            //builder.Services.AddFluentValidationClientsideAdapters(); // w tym momencie zbêdne
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+
+
             //builder.Services.AddHostedService<MQTTSubscribeService>();
             //builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
+
+            builder.Services.AddScoped<LSysDbSeeder>();
+
+            //builder.Services.AddScoped<IValidator<RegisterUserVM>, RegisterUserVMValidator>();
             builder.Services.AddDataAccessEFServices(builder.Configuration); // Dodanie serwisów z warstwy DataAccess
             builder.Services.Configure<IdentityOptions>(opt =>
             {
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
-                opt.Password.RequireNonAlphanumeric= false;
-                opt.Password.RequireDigit= false;
-                opt.Password.RequiredLength=0;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 0;
             });
 
             //builder.Services.AddScoped<ErrorHandlingMiddleware>();
@@ -68,7 +82,7 @@ namespace LSys
                 seeder.Seed();
             }
             //app.UseMiddleware<ErrorHandlingMiddleware>();
-            
+
 
 
             if (app.Environment.IsDevelopment())
@@ -84,10 +98,10 @@ namespace LSys
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.MapControllers();
 

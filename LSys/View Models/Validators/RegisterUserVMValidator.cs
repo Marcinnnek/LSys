@@ -20,6 +20,7 @@ namespace LSys.View_Models.Validators
                         context.AddFailure("Email", "That email is taken!");
                     }
                 });
+            RuleFor(x => x.ConfirmPassword).Equal(z=>z.Password).WithMessage("Password and Confirm Password must be equal!");
         }
     }
 }

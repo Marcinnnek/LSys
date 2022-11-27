@@ -28,7 +28,6 @@ namespace LSys_DataAccess
 
             services.AddScoped(typeof(IRepository<,,>), typeof(Repository<,,>));
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<LSysDbContext>();
-            //services.AddScoped<IPasswordHasher<UserDTO>, PasswordHasher<UserDTO>>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
