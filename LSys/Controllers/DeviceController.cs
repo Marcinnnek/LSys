@@ -1,16 +1,27 @@
-﻿using LSys.Services;
+﻿using AutoMapper;
+using LSys.Services;
 using LSys.View_Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LSys.Controllers
 {
-    public class DeviceController : ControllerBase
+    public class DeviceController : Controller
     {
         private readonly IDeviceService _deviceService;
+        private readonly IMapper _mapper;
 
-        public DeviceController(IDeviceService deviceService)
+        public DeviceController(IDeviceService deviceService, IMapper mapper)
         {
             _deviceService = deviceService;
+            _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var allDevices = await _deviceService.GetDevices();
+            var result = _mapper.Map<IEnumerable<GetDeviceVM>>(allDevices);
+            return View(result);
         }
 
         [HttpPost("AddDevice")]

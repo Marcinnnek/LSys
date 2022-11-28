@@ -1,19 +1,14 @@
 using FluentValidation;
 using LSys.Middleware;
 using LSys.Services;
-using LSys.View_Models;
-using LSys.View_Models.Validators;
 using LSys_DataAccess;
-using LSys_DataAccess.Repository;
-using LSys_Domain;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FluentValidation;
+
 using FluentValidation.AspNetCore;
+using System.Reflection;
 
 namespace LSys
 {
@@ -40,6 +35,8 @@ namespace LSys
             //builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
+
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             builder.Services.AddScoped<LSysDbSeeder>();
 

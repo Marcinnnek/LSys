@@ -15,6 +15,11 @@ namespace LSys.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<IEnumerable<DeviceDTO>> GetDevices()
+        {
+            var allDevices = _unitOfWork.Devices.GetAll();
+            return allDevices;
+        }
         public async Task<bool> AddNewDevice(AddDeviceVM deviceVM)
         {
             if (deviceVM != null)

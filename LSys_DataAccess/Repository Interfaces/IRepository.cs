@@ -10,7 +10,8 @@ namespace LSys_DataAccess.Repository_Interfaces
     public interface IRepository<TResult, TInput, N> where TResult : class where TInput : class // TInput - Domain // TResult - DTO
     {
         TInput GetById(N id);
-        List<TInput> GetRange(Expression<Func<TResult, bool>> predicate);
+        IEnumerable<TInput> GetRange(Expression<Func<TResult, bool>> predicate);
+        IEnumerable<TInput> GetAll();
         object Add(TInput entity);
         void Update(TInput entity);
         void Remove(TInput entity);

@@ -37,11 +37,25 @@ namespace LSys_DataAccess.Repository
             return _mapper.Map<TInput>(_dbContext.Set<TResult>().Find(id));
         }
 
-        public List<TInput> GetRange(Expression<Func<TResult, bool>> predicate)
+        //public IEnumerable<TInput> GetRange(Expression<Func<TResult, bool>> predicate, Expression<Func<TResult,bool>> orderBy)
+        //{
+        //    var dbEntities = _dbContext.Set<TResult>().Where(predicate).OrderBy(orderBy);
+        //    var result = _mapper.Map<IQueryable<TResult>, IEnumerable<TInput>>(dbEntities);
+        //    return result;
+        //}
+        public IEnumerable<TInput> GetRange(Expression<Func<TResult, bool>> predicate)
         {
-            throw new NotImplementedException();
+            var dbEntities = _dbContext.Set<TResult>().OrderBy(predicate);
+            var result = _mapper.Map<IQueryable<TResult>, IEnumerable<TInput>>(dbEntities);
+            return result;
         }
 
+        public IEnumerable<TInput> GetAll() 
+        {
+            var dbEntities = _dbContext.Set<TResult>();
+            var result = _mapper.Map<IEnumerable<TResult>, IEnumerable<TInput>>(dbEntities);
+            return result;
+        }
 
         public void Remove(TInput entity)
         {

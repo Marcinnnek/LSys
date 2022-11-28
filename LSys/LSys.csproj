@@ -31,8 +31,4 @@
     <ProjectReference Include="..\LSys_DB\LSys_DB.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mapping Profiles\" />
-  </ItemGroup>
-
 </Project>

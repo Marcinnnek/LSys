@@ -1,0 +1,51 @@
+﻿@using LSys.View_Models;
+
+@model IEnumerable<GetDeviceVM>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    int rowNumber = 0;
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Group</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Credentials</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">@(rowNumber += 1)</th>
+
+                            <td>@item.Group</td>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>@item.Location</td>
+                            <td>
+                                <a type="button" asp-controller="MQTTCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">MQTT</a>
+                                <a type="button" asp-controller="WiFiCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">WiFi</a>
+                            </td>
+                            <td>
+                                <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@item.Id" class="btn btn-success">Update</a>
+                                <a type="button" asp-controller="Device" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
