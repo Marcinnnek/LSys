@@ -1,6 +1,6 @@
-﻿using LSys_DB.Entities.Schedulers;
+﻿using LSys_Domain.Entities.Schedulers;
 
-namespace LSys_DB.Entities.Dimmers
+namespace LSys_Domain.Entities.Dimmers
 {
     public class DimmerSchedulerList
     {

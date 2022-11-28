@@ -1,8 +1,8 @@
-﻿namespace LSys_DB.Entities.Sensors
+﻿namespace LSys_Domain.Entities.Sensors
 {
-    public class SensorSettings
+    public class SensorSettings : EntityBase<int>
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public bool State { get; set; } = false;
         public float MeasurementPeriod { get; set; } = 60;
         public float Offset { get; set; } = 0;

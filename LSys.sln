@@ -5,11 +5,13 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSys", "LSys\LSys.csproj", "{48929F2B-14C1-4348-A5B4-A428BCB7750A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSys_DB", "LSys_DB\LSys_DB.csproj", "{978C0923-61FA-40A3-8E2F-7F5252234B16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSys_Domain", "LSys_DB\LSys_Domain.csproj", "{978C0923-61FA-40A3-8E2F-7F5252234B16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSys_TEST", "LSys_TEST\LSys_TEST.csproj", "{2B013AD9-60F5-470E-8D79-B40FB0F73997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSys_Common", "LSys_Common\LSys_Common.csproj", "{60572CB8-079C-4A46-B69E-629C3208D4E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LSys_Common", "LSys_Common\LSys_Common.csproj", "{60572CB8-079C-4A46-B69E-629C3208D4E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSys_DataAccess", "LSys_DataAccess\LSys_DataAccess.csproj", "{84A7192B-3CE7-4109-82B1-778535727E29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{60572CB8-079C-4A46-B69E-629C3208D4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60572CB8-079C-4A46-B69E-629C3208D4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60572CB8-079C-4A46-B69E-629C3208D4E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84A7192B-3CE7-4109-82B1-778535727E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84A7192B-3CE7-4109-82B1-778535727E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84A7192B-3CE7-4109-82B1-778535727E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84A7192B-3CE7-4109-82B1-778535727E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
