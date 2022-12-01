@@ -1,0 +1,77 @@
+﻿@using LSys.View_Models
+@model GetDeviceVM
+
+<div class="modal fade" style="z-index: -1" id="DeleteDevice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class=" modal-header">
+                <h5 class="modal-title"> Delete device</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"> &times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <h1>TEST PARTIAL VIEW</h1>
+                <form asp-action="Delete">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Name
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Id</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Id
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0 ">Group</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary fw-bold">
+                                @Model.Group
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Mobile</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary ">
+                                @Model.Location
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Description</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Description
+                            </div>
+                        </div>
+                        <hr>
+
+
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

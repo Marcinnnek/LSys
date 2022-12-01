@@ -1,4 +1,5 @@
-﻿using LSys.View_Models;
+﻿using AutoMapper;
+using LSys.View_Models;
 using LSys_DataAccess.DTOs;
 using LSys_DataAccess.UOW;
 using LSys_Domain.Entities;
@@ -9,10 +10,12 @@ namespace LSys.Services
     public class DeviceService : IDeviceService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DeviceService(IUnitOfWork unitOfWork)
+        public DeviceService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<DeviceDTO>> GetDevices()
@@ -20,22 +23,24 @@ namespace LSys.Services
             var allDevices = _unitOfWork.Devices.GetAll();
             return allDevices;
         }
-        public async Task<bool> AddNewDevice(AddDeviceVM deviceVM)
+
+        public async Task<GetDeviceVM> GetCurrentDevice(Guid id)
+        {
+            var device = _mapper.Map<GetDeviceVM>(_unitOfWork.Devices.GetById(id));
+            return device;
+        }
+        public async Task<DbResult<DeviceDTO>> AddNewDevice(DeviceDTO deviceVM)
         {
             if (deviceVM != null)
             {
-                DeviceDTO newDevice = new DeviceDTO()
-                {
-                    Name = deviceVM.Name,
-                    Description = deviceVM.Description,
-                    Location = deviceVM.Location,
-                    Group = deviceVM.Group,
-                };
-                newDevice.Id = (Guid)_unitOfWork.Devices.Add(newDevice);
-
+                deviceVM.Id = (Guid)_unitOfWork.Devices.Add(deviceVM);
             }
-            var result = await _unitOfWork.Complete();
-            return result > 0 ? true : false;
+            var result = new DbResult<DeviceDTO>()
+            {
+                Result = await _unitOfWork.Complete(),
+                DTOEntity = deviceVM
+            };
+            return result;
         }
 
         public async Task<bool> AddWiFiCredentials(Guid deviceId, AddWiFiVM wifiVM)

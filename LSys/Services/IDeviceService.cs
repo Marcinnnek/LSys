@@ -5,8 +5,10 @@ namespace LSys.Services
 {
     public interface IDeviceService
     {
+        // dodac metode która wyszuka wszytkie ip w sieci oraz wyświetli tylko te które nie są przypisane do żadnego urządzenia
         Task<IEnumerable<DeviceDTO>> GetDevices();
-        Task<bool> AddNewDevice(AddDeviceVM deviceVM);
+        Task<GetDeviceVM> GetCurrentDevice(Guid id);
+        Task<DbResult<DeviceDTO>> AddNewDevice(DeviceDTO deviceVM);
         Task<bool> AddWiFiCredentials(Guid deviceId, AddWiFiVM wifiVM);
     }
 }

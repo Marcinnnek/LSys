@@ -8,11 +8,17 @@
     int rowNumber = 0;
 }
 
+<div class="container-fluid mt-4 px-4">
+    <a type="button" asp-controller="Device" asp-action="Add" class="btn btn-primary mb-3 d-grid gap-2">Add new device</a>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-bordered">
+            Devices
+
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -24,6 +30,17 @@
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Group</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Credentials</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </tfoot>
                 <tbody>
                     @foreach (var item in Model)
                     {
@@ -34,18 +51,23 @@
                             <td>@item.Name</td>
                             <td>@item.Description</td>
                             <td>@item.Location</td>
-                            <td>
+                            <td class="text-right">
                                 <a type="button" asp-controller="MQTTCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">MQTT</a>
                                 <a type="button" asp-controller="WiFiCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">WiFi</a>
+                                <a type="button" asp-controller="Device" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                                
                             </td>
-                            <td>
+                            <td class="text-right ">
                                 <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@item.Id" class="btn btn-success">Update</a>
                                 <a type="button" asp-controller="Device" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     }
+                    @*Przygotować paginacje dla listy*@
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
+
