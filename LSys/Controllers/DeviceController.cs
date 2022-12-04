@@ -70,14 +70,19 @@ namespace LSys.Controllers
         public async Task<IActionResult> Details([FromRoute] Guid id)
         {
 
-            var result = await _deviceService.GetDevice(id);
+            var device = await _deviceService.GetDevice(id);
 
+            var result = new GetDeviceMQTTWiFiVM()
+            {
+                deviceVM = device,
+            };
             return View(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+
             await _deviceService.DeleteDevice(id);
             return RedirectToAction("Index");
         }

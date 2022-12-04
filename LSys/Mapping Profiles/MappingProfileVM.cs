@@ -13,6 +13,11 @@ namespace LSys.Mapping_Profiles
             CreateMap<UpdateDeviceVM, DeviceDTO>().ReverseMap();
             CreateMap<UpdateDeviceVM, GetDeviceVM>().ReverseMap();
 
+            CreateMap<GetWiFiVM, WiFiCredentialsDTO>().ReverseMap();
+
+            CreateMap<GetMQTTVM, MQTTCredentialsDTO>().ReverseMap();
+
+
         }
     }
 }

@@ -1,0 +1,46 @@
+﻿@using LSys.View_Models
+@model AddMQTTVM
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="card-body">
+    <form asp-controller="MQTT" asp-action="Add" method="post" enctype="multipart/form-data">
+        <div class ="mb-2">
+            <label asp-for="ServerIp">Server IP</label>
+            <input asp-for="ServerIp" class="form-control" type="text" />
+            <span asp-validation-for="ServerIp" class="text-danger"></span>
+
+        </div>
+        <div class ="mb-2">
+            <label asp-for="Port">Port</label>
+            <input asp-for="Port" class="form-control" type="text" />
+            <span asp-validation-for="Port" class="text-danger"></span>
+
+        </div>
+        <div class="mb-2">
+            <label asp-for="MQTTId">MQTT device Id (random unique)</label>
+            <input asp-for=MQTTId class="form-control" type="text" />
+            <span asp-validation-for="MQTTId" class="text-danger"></span>
+
+        </div>
+        <div class="mb-2">
+            <label asp-for="Login">Login</label>
+            <input asp-for="Login" class="form-control" type="text" />
+            <span asp-validation-for="Login" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" class="form-control" type="text" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="mt-4 mb-0">
+            <div type="submit" class="d-grid">
+                <button type="submit" class="btn btn-primary btn-block">Add MQTT credentials to device</button>
+            </div>
+        </div>
+    </form>
+</div>

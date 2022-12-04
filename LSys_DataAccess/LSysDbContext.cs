@@ -101,7 +101,7 @@ namespace LSys_Domain
                 EB.Property(WiFiC => WiFiC.DeviceIP).HasMaxLength(15);
                 EB.HasIndex(WiFiC => WiFiC.DeviceIP).IsUnique(true);
                 EB.Property(WiFiC => WiFiC.GateWay).HasMaxLength(15);
-                EB.Property(WiFiC => WiFiC.ResetPassword).HasMaxLength(20);
+                EB.Property(WiFiC => WiFiC.SecurityPassword).HasMaxLength(20);
 
             });
 

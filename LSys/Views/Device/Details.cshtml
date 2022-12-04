@@ -1,5 +1,5 @@
 ﻿@using LSys.View_Models
-@model GetDeviceVM
+@model GetDeviceMQTTWiFiVM
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -13,7 +13,7 @@
                     <h6 class="mb-0">Name</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                    @Model.Name
+                    @Model.deviceVM.Name
                 </div>
             </div>
             <hr>
@@ -22,7 +22,7 @@
                     <h6 class="mb-0">Id</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                    @Model.Id
+                    @Model.deviceVM.Id
                 </div>
             </div>
             <hr>
@@ -31,7 +31,7 @@
                     <h6 class="mb-0 ">Group</h6>
                 </div>
                 <div class="col-sm-9 text-secondary fw-bold">
-                    @Model.Group
+                    @Model.deviceVM.Group
                 </div>
             </div>
             <hr>
@@ -40,7 +40,7 @@
                     <h6 class="mb-0">Mobile</h6>
                 </div>
                 <div class="col-sm-9 text-secondary ">
-                    @Model.Location
+                    @Model.deviceVM.Location
                 </div>
             </div>
             <hr>
@@ -49,16 +49,18 @@
                     <h6 class="mb-0">Description</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                    @Model.Description
+                    @Model.deviceVM.Description
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-sm-12">
-                    <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@Model.Id" class="btn btn-success">Update</a>
+                    <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@Model.deviceVM.Id" class="btn btn-success">Update</a>
+                    <a type="button" asp-controller="MQTT" asp-action="Update" asp-route-id="@Model.deviceVM.Id" class="btn btn-primary">MQTT Credentials</a>
+                    <a type="button" asp-controller="MQTT" asp-action="Add" asp-route-id="@Model.deviceVM.Id" class="btn btn-primary">Add MQTT server</a>
+                    <a type="button" asp-controller="WiFi" asp-action="Update" asp-route-id="@Model.deviceVM.Id" class="btn btn-primary">WiFi Credentials</a>
 
-
-                    <a type="button" class="btn btn-danger" onclick="document.getElementById('Device-@Model.Id').style.display='block' ">Delete Device</a>
+                    <a type="button" class="btn btn-danger" onclick="document.getElementById('Device-@Model.deviceVM.Id').style.display='block' ">Delete Device</a>
                 </div>
             </div>
         </div>
@@ -66,19 +68,19 @@
 </div>
 
 
-<div id="Device-@Model.Id" class="modal" tabindex="-1" role="dialog">
+<div id="Device-@Model.deviceVM.Id" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Device</h5>
             </div>
-            <form asp-controller="Device" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            <form asp-controller="Device" asp-action="Delete" asp-route-id="@Model.deviceVM.Id" method="post">
                 <div class="modal-body">
                     <p>Are you sure you want to delete this device?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="document.getElementById('Device-@Model.Id').style.display='none'" class="btn btn-secondary">Cancel</button>
-                    <button type="submit" onclick="document.getElementById('Device-@Model.Id').style.display='none'" class="btn btn-danger">Delete</button>
+                    <button type="button" onclick="document.getElementById('Device-@Model.deviceVM.Id').style.display='none'" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" onclick="document.getElementById('Device-@Model.deviceVM.Id').style.display='none'" class="btn btn-danger">Delete</button>
                 </div>
             </form>
         </div>
@@ -88,7 +90,7 @@
 
 <script>
     // Get the modal
-    var modal = document.getElementById('Device-@Model.Id');
+    var modal = document.getElementById('Device-@Model.deviceVM.Id');
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
