@@ -25,7 +25,6 @@ namespace LSys.Controllers
             return View(result);
         }
 
-        //[HttpGet("Add")]
         [HttpGet]
         public async Task<IActionResult> Add()
         {
@@ -33,17 +32,15 @@ namespace LSys.Controllers
             return View(deviceVM);
         }
 
-        //[HttpPost("Device/Add")]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] AddDeviceVM deviceVM)
         {
             if (ModelState.IsValid)
             {
-                var newDeviceDTO = _mapper.Map<DeviceDTO>(deviceVM);
-                var result = await _deviceService.AddNewDevice(newDeviceDTO);
+                var result = await _deviceService.AddNewDevice(deviceVM);
                 if (result.Result > 0)
                 {
-                    return Redirect("~/Views/Home/Index.cshtml");
+                    return RedirectToAction("Index");
                 }
                 return View(deviceVM);
             }
@@ -51,45 +48,52 @@ namespace LSys.Controllers
         }
 
 
-        //[HttpPost("AddWiFiCredentials/{Id}")]
-        [HttpPost]
-        public async Task<IActionResult> AddWiFiCredentials([FromRoute] Guid Id, [FromBody] AddWiFiVM wifiVM)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _deviceService.AddWiFiCredentials(Id, wifiVM);
-                if (result == true)
-                {
-                    return StatusCode(201);
-                }
-                else
-                {
-                    return NoContent();
-                }
-            }
-            return NoContent();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> AddWiFiCredentials([FromRoute] Guid Id, [FromBody] AddWiFiVM wifiVM)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = await _deviceService.AddWiFiCredentials(Id, wifiVM);
+        //        if (result == true)
+        //        {
+        //            return StatusCode(201);
+        //        }
+        //        else
+        //        {
+        //            return NoContent();
+        //        }
+        //    }
+        //    return NoContent();
+        //}
 
-        //[HttpGet("Device/Details")]
         [HttpGet]
         public async Task<IActionResult> Details([FromRoute] Guid id)
         {
 
-            var result = await _deviceService.GetCurrentDevice(id);
+            var result = await _deviceService.GetDevice(id);
 
             return View(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete ([FromRoute]Guid id)
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var result = await _deviceService.GetCurrentDevice(id);
-            return PartialView("_DeletePartialView", result);
+            await _deviceService.DeleteDevice(id);
+            return RedirectToAction("Index");
         }
 
-        //public async Task<IActionResult> Delete(GetDeviceVM device)
-        //{
-        //    return PartialView("DeletePartialView", result);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Update([FromRoute] Guid id)
+        {
+            var deviceVM = _mapper.Map<UpdateDeviceVM>(await _deviceService.GetDevice(id));
+
+            return View(deviceVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update([FromForm] UpdateDeviceVM deviceVM)
+        {
+            await _deviceService.UpdateDevice(deviceVM);
+            return RedirectToAction("Index");
+        }
     }
 }

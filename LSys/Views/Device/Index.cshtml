@@ -55,13 +55,35 @@
                                 <a type="button" asp-controller="MQTTCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">MQTT</a>
                                 <a type="button" asp-controller="WiFiCredentials" asp-action="Get" asp-route-id="@item.Id" class="btn btn-primary">WiFi</a>
                                 <a type="button" asp-controller="Device" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
-                                
+
                             </td>
                             <td class="text-right ">
                                 <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@item.Id" class="btn btn-success">Update</a>
-                                <a type="button" asp-controller="Device" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                                <button type="button" class="btn btn-danger" onclick="outsideClick('Device-@item.Id'), document.getElementById('Device-@item.Id').style.display='block'">Delete</button>
                             </td>
                         </tr>
+
+                        <div id="Device-@item.Id" class="modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete Device</h5>
+                                    </div>
+                                    <form asp-controller="Device" asp-action="Delete" asp-route-id="@item.Id" method="post">
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this device?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" onclick="document.getElementById('Device-@item.Id').style.display='none'" class="btn btn-secondary">Cancel</button>
+                                            <button type="submit" onclick="document.getElementById('Device-@item.Id').style.display='none'" class="btn btn-danger">Delete</button>
+
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
                     }
                     @*Przygotować paginacje dla listy*@
                 </tbody>
@@ -71,3 +93,17 @@
     </div>
 </div>
 
+<script>
+    function outsideClick(id) {
+        var modal = document.getElementById(id);
+        console.log(id)
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    };
+
+
+</script>

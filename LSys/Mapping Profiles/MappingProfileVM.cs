@@ -10,6 +10,8 @@ namespace LSys.Mapping_Profiles
         {
             CreateMap<GetDeviceVM, DeviceDTO>().ReverseMap();
             CreateMap<AddDeviceVM, DeviceDTO>().ReverseMap();
+            CreateMap<UpdateDeviceVM, DeviceDTO>().ReverseMap();
+            CreateMap<UpdateDeviceVM, GetDeviceVM>().ReverseMap();
 
         }
     }

@@ -37,6 +37,7 @@ namespace LSys_DataAccess.Repository
             return _mapper.Map<TInput>(_dbContext.Set<TResult>().Find(id));
         }
 
+
         //public IEnumerable<TInput> GetRange(Expression<Func<TResult, bool>> predicate, Expression<Func<TResult,bool>> orderBy)
         //{
         //    var dbEntities = _dbContext.Set<TResult>().Where(predicate).OrderBy(orderBy);
@@ -50,28 +51,31 @@ namespace LSys_DataAccess.Repository
             return result;
         }
 
-        public IEnumerable<TInput> GetAll() 
+        public IEnumerable<TInput> GetAll()
         {
             var dbEntities = _dbContext.Set<TResult>();
             var result = _mapper.Map<IEnumerable<TResult>, IEnumerable<TInput>>(dbEntities);
             return result;
         }
 
-        public void Remove(TInput entity)
+        public void Remove(TId Id)
         {
-            TResult result = _mapper.Map<TResult>(entity);
-            _dbContext.Set<TResult>().Remove(result);
+            TResult dbEntity = _dbContext.Set<TResult>().Find(Id);
+            _dbContext.Set<TResult>().Remove(dbEntity);
+            //TResult result = _mapper.Map<TResult>(entity);
+            //_dbContext.Set<TResult>().Remove(result);
         }
 
         public void Update(TInput entity)
         {
-            throw new NotImplementedException();
+            var result = _mapper.Map<TResult>(entity);
+            _dbContext.Set<TResult>().Update(result);
         }
 
         private object? GetIdFromObj(object obj)
         {
             Type resultType = obj.GetType();
-            PropertyInfo ?propInfo = resultType.GetProperty(nameof(EntityBase<TId>.Id));
+            PropertyInfo? propInfo = resultType.GetProperty(nameof(EntityBase<TId>.Id));
             object? propValue;
             if (propInfo != null)
             {

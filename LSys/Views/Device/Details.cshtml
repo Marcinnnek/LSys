@@ -56,8 +56,9 @@
             <div class="row">
                 <div class="col-sm-12">
                     <a type="button" asp-controller="Device" asp-action="Update" asp-route-id="@Model.Id" class="btn btn-success">Update</a>
-                    @*<a type="button" asp-controller="Device" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>*@
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@("#DeleteDevice"+Model.Id)">Delete (PV)</button>
+
+
+                    <a type="button" class="btn btn-danger" onclick="document.getElementById('Device-@Model.Id').style.display='block' ">Delete Device</a>
                 </div>
             </div>
         </div>
@@ -65,5 +66,36 @@
 </div>
 
 
+<div id="Device-@Model.Id" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Device</h5>
+            </div>
+            <form asp-controller="Device" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this device?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="document.getElementById('Device-@Model.Id').style.display='none'" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" onclick="document.getElementById('Device-@Model.Id').style.display='none'" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
 
-@await Html.PartialAsync("_DeletePartialView", Model)
+    </div>
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('Device-@Model.Id');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
