@@ -4,7 +4,7 @@ using LSys_Domain.Entities.Sensors;
 
 namespace LSys_Domain.Entities
 {
-    public class Device : EntityBase<Guid>
+    public class Device : IEntityBase<Guid>
     {
         //public Guid Id { get; set; }
         public string Name { get; set; }
@@ -18,5 +18,6 @@ namespace LSys_Domain.Entities
         public List<AppUser>? Users { get; set; }
         public List<Sensor>? Sensors { get; set; }
         public List<Dimmer>? Dimmers { get; set; }
+        public Guid Id { get; set; }
     }
 }

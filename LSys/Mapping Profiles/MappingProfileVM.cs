@@ -16,6 +16,7 @@ namespace LSys.Mapping_Profiles
             CreateMap<GetWiFiVM, WiFiCredentialsDTO>().ReverseMap();
 
             CreateMap<GetMQTTVM, MQTTCredentialsDTO>().ReverseMap();
+            CreateMap<AddMQTTVM, MQTTCredentialsDTO>().ReverseMap();
 
 
         }

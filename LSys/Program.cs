@@ -35,6 +35,7 @@ namespace LSys
             //builder.Services.AddHostedService<MQTTPublishService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
+            builder.Services.AddScoped<IMQTTService, MQTTService>();
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

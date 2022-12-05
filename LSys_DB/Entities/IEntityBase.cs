@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LSys_Domain.Entities
 {
-    public abstract class EntityBase<T> : IEntityBase<T>
+    public interface IEntityBase<T>
     {
         public T Id { get; set; }
     }

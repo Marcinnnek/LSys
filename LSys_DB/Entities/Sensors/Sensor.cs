@@ -1,6 +1,6 @@
 ﻿namespace LSys_Domain.Entities.Sensors
 {
-    public class Sensor : EntityBase<int>
+    public class Sensor : IEntityBase<int>
     {
         //public int Id { get; set; }
         public string Name { get; set; }
@@ -13,6 +13,6 @@
         // Relacja -  jeden sensor ma jedne ustawienia (opcjonalnie można - jeden sensor ma wiele ustawień)
         public int SensorSettingsId { get; set; }
         public SensorSettings SensorSettings { get; set; }
-
+        public int Id { get; set; }
     }
 }

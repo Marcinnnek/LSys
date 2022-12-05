@@ -2,8 +2,9 @@
 
 namespace LSys_Domain.Entities
 {
-    public class MQTTCredentials : EntityBase<Guid>
+    public class MQTTCredentials : IEntityBase<Guid>
     {
+        public Guid Id { get; set; }
         public string ServerIp { get; set; }
         public string Port { get; set; }
         public string MQTTId { get; set; }

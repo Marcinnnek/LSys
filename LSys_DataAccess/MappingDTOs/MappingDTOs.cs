@@ -13,6 +13,7 @@ namespace LSys_DataAccess.MappingDTOs
             CreateMap<IdentityRole, RoleDTO>().ReverseMap();
             CreateMap<Device, DeviceDTO>().ReverseMap();
             CreateMap<WiFiCredentials, WiFiCredentialsDTO>().ReverseMap();
+            CreateMap<MQTTCredentials, MQTTCredentialsDTO>().ReverseMap();
         }
     }
 }
