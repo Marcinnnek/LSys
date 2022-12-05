@@ -36,8 +36,12 @@ namespace LSys.Controllers
         [HttpPost("/MQTT/Add/{deviceId}")]
         public async Task<IActionResult> Add([FromRoute] Guid deviceId, [FromForm] AddMQTTVM mqttVM)
         {
-            await _mqttService.AddMQTTServer(mqttVM, deviceId);
-            return View();
+             var result = await _mqttService.AddMQTTServer(mqttVM, deviceId);
+            if (result.Result>0)
+            {
+                return Redirect($"~/Device/Details/{deviceId}");
+            }
+            return View(mqttVM);
         }
         public IActionResult Delete()
         {

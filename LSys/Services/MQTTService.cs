@@ -22,9 +22,8 @@ namespace LSys.Services
             Console.WriteLine("test");
             if (mqttVM != null)
             {
-                mqttDTO.Id = (Guid)_unitOfWork.MQTTCredentials.Add(mqttDTO);
-                var device = _unitOfWork.Devices.GetDeviceByIdAsNoTracking(deviceId);
-                device.MQTTCredentialsId = mqttDTO.Id;
+                var device = _unitOfWork.Devices.GetByIdAsNoTracking(deviceId);
+                device.MQTTCredentials = mqttDTO;
                 _unitOfWork.Devices.Update(device);
             }
             var result = new DbResult<MQTTCredentialsDTO>()

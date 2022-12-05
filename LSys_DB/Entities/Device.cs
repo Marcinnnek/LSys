@@ -6,7 +6,7 @@ namespace LSys_Domain.Entities
 {
     public class Device : IEntityBase<Guid>
     {
-        //public Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? Location { get; set; }
@@ -18,6 +18,6 @@ namespace LSys_Domain.Entities
         public List<AppUser>? Users { get; set; }
         public List<Sensor>? Sensors { get; set; }
         public List<Dimmer>? Dimmers { get; set; }
-        public Guid Id { get; set; }
+
     }
 }

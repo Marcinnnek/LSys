@@ -18,7 +18,7 @@ namespace LSys_DataAccess.Repository
         {
         }
 
-        public DeviceDTO GetDeviceByIdAsNoTracking(Guid Id)
+        public DeviceDTO GetByIdAsNoTracking(Guid Id)
         {
             DeviceDTO deviceDTO = _mapper.Map<DeviceDTO>(_dbContext.Devices.AsNoTracking().FirstOrDefault(d => d.Id == Id));
             return deviceDTO;

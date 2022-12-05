@@ -10,6 +10,6 @@ namespace LSys_DataAccess.Repository_Interfaces
 {
     public interface IDeviceRepository :IRepository<Device, DeviceDTO, Guid>
     {
-        public DeviceDTO GetDeviceByIdAsNoTracking(Guid Id);
+        public DeviceDTO GetByIdAsNoTracking(Guid Id);
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Sensor : IEntityBase<int>
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Units { get; set; }
         // Relacja - jedeno urzadzenie ma wiele sensorów
@@ -13,6 +13,6 @@
         // Relacja -  jeden sensor ma jedne ustawienia (opcjonalnie można - jeden sensor ma wiele ustawień)
         public int SensorSettingsId { get; set; }
         public SensorSettings SensorSettings { get; set; }
-        public int Id { get; set; }
+
     }
 }
