@@ -16,7 +16,7 @@ namespace LSys.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/RegisterUser")]
         public async Task<IActionResult> RegisterUser()
         {
 
@@ -39,14 +39,14 @@ namespace LSys.Controllers
             return View(registerVM);
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/LogInUser")]
         public async Task<IActionResult> LogInUser()
         {
             return View(new LoginUserVM());
         }
 
 
-        [HttpPost("[controller]/LoginUser")]
+        [HttpPost("[controller]/LogInUser")]
         public async Task<IActionResult> LogInUser([FromForm] LoginUserVM loginVM)
         {
             if (ModelState.IsValid)
@@ -63,7 +63,7 @@ namespace LSys.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("[controller]/LogOut")]
         public async Task<IActionResult> LogOut()
         {
             await _userService.LogOutUser();

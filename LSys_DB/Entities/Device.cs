@@ -17,7 +17,7 @@ namespace LSys_Domain.Entities
         public MQTTCredentials? MQTTCredentials { get; set; }
         public List<AppUser>? Users { get; set; }
         public List<Sensor>? Sensors { get; set; }
-        public List<Dimmer>? Dimmers { get; set; }
+        public List<Relay>? Relays { get; set; }
 
     }
 }

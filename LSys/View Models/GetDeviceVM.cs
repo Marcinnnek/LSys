@@ -1,4 +1,6 @@
-﻿namespace LSys.View_Models
+﻿using LSys_DataAccess.DTOs;
+
+namespace LSys.View_Models
 {
     public class GetDeviceVM
     {
@@ -7,5 +9,7 @@
         public string? Description { get; set; }
         public string? Location { get; set; }
         public string? Group { get; set; }
+        public List<RelayDTO> Relays { get; set; }
+
     }
 }

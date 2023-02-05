@@ -11,11 +11,13 @@ namespace LSys.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMQTTHandler _mqttHandler;
 
         public DeviceService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _mqttHandler = new MQTTHandler("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest");
         }
 
         public async Task<IEnumerable<DeviceDTO>> GetDevices()
@@ -27,6 +29,7 @@ namespace LSys.Services
         public async Task<GetDeviceVM> GetDevice(Guid id)
         {
             var device = _mapper.Map<GetDeviceVM>(_unitOfWork.Devices.GetById(id));
+        
             return device;
         }
         public async Task<DbResult<DeviceDTO>> AddNewDevice(AddDeviceVM deviceVM)
@@ -34,7 +37,8 @@ namespace LSys.Services
             var deviceDTO = _mapper.Map<DeviceDTO>(deviceVM);
             if (deviceVM != null)
             {
-
+                var relay = new RelayDTO();
+                deviceDTO.Relays.Add(relay);
                 deviceDTO.Id = (Guid)_unitOfWork.Devices.Add(deviceDTO);
             }
             var result = new DbResult<DeviceDTO>()

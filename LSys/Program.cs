@@ -31,8 +31,9 @@ namespace LSys
 
 
 
-            //builder.Services.AddHostedService<MQTTSubscribeService>();
-            //builder.Services.AddHostedService<MQTTPublishService>();
+
+            //builder.Services.AddSingleton<IMQTTHandler>(x=>new MQTTHandler("MQTTAdminUser","192.168.1.200", "1883", "MQTTAdminUser","usertest"));
+            builder.Services.AddHostedService<MQTTHandler>(x => new MQTTHandler("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest"));
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
             builder.Services.AddScoped<IMQTTService, MQTTService>();

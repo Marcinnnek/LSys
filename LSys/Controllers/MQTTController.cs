@@ -20,7 +20,7 @@ namespace LSys.Controllers
         {
             return View();
         }
-
+        [HttpGet("/MQTT/Update/{deviceId}")]
         public IActionResult Update()
         {
             return View();

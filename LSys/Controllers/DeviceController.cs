@@ -17,7 +17,7 @@ namespace LSys.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/Index")]
         public async Task<IActionResult> Index()
         {
             var allDevices = await _deviceService.GetDevices();
@@ -25,14 +25,14 @@ namespace LSys.Controllers
             return View(result);
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/Add")]
         public async Task<IActionResult> Add()
         {
             var deviceVM = new AddDeviceVM();
             return View(deviceVM);
         }
 
-        [HttpPost]
+        [HttpPost("[controller]/Add")]
         public async Task<IActionResult> Add([FromForm] AddDeviceVM deviceVM)
         {
             if (ModelState.IsValid)
@@ -66,7 +66,7 @@ namespace LSys.Controllers
         //    return NoContent();
         //}
 
-        [HttpGet]
+        [HttpGet("[controller]/Details/{Id}")]
         public async Task<IActionResult> Details([FromRoute] Guid id)
         {
 
@@ -79,7 +79,7 @@ namespace LSys.Controllers
             return View(result);
         }
 
-        [HttpPost]
+        [HttpPost("[controller]/Delete/{Id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
 
@@ -87,14 +87,14 @@ namespace LSys.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/Update/{Id}")]
         public async Task<IActionResult> Update([FromRoute] Guid id)
         {
             var deviceVM = _mapper.Map<UpdateDeviceVM>(await _deviceService.GetDevice(id));
 
             return View(deviceVM);
         }
-        [HttpPost]
+        [HttpPost("[controller]/Update/{Id}")]
         public async Task<IActionResult> Update([FromForm] UpdateDeviceVM deviceVM)
         {
             await _deviceService.UpdateDevice(deviceVM);

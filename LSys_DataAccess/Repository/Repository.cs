@@ -55,7 +55,7 @@ namespace LSys_DataAccess.Repository
 
         public IEnumerable<TInput> GetAll()
         {
-            var dbEntities = _dbSet;
+            var dbEntities = _dbSet.Include();
             var result = _mapper.Map<IEnumerable<TResult>, IEnumerable<TInput>>(dbEntities);
             return result;
         }

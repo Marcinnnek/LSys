@@ -11,6 +11,6 @@ namespace LSys.Services
         Task<DbResult<DeviceDTO>> AddNewDevice(AddDeviceVM deviceVM);
         Task DeleteDevice(Guid id);
         Task UpdateDevice(UpdateDeviceVM deviceVM);
-        Task<bool> AddWiFiCredentials(Guid deviceId, AddWiFiVM wifiVM);
+        //Task<bool> AddWiFiCredentials(Guid deviceId, AddWiFiVM wifiVM);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using LSys_Domain.Entities;
-using LSys_Domain.Entities.Dimmers;
+using LSys_Domain.Entities.Relays;
 using LSys_Domain.Entities.Schedulers;
 using LSys_Domain.Entities.Sensors;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,7 +23,7 @@ namespace LSys_Domain
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Readings> Readings { get; set; }
         public DbSet<SensorSettings> SensorSettings { get; set; }
-        public DbSet<Dimmer> Dimmers { get; set; }
+        public DbSet<Relay> Relays { get; set; }
         public DbSet<Scheduler> Schedulers { get; set; }
 
 
@@ -150,21 +150,21 @@ namespace LSys_Domain
                 .HasForeignKey<Sensor>(S => S.SensorSettingsId);
             });
 
-            modelBuilder.Entity<Dimmer>(EB =>
+            modelBuilder.Entity<Relay>(EB =>
             {
                 EB.HasOne(Dim => Dim.Device)
-                .WithMany(D => D.Dimmers)
+                .WithMany(D => D.Relays)
                 .HasForeignKey(Dim => Dim.DeviceId);
             });
 
             modelBuilder.Entity<Scheduler>(EB =>
             {
-                EB.HasMany(S => S.Dimmers)
+                EB.HasMany(S => S.Relays)
                 .WithMany(D => D.Schedulers)
-                .UsingEntity<DimmerSchedulerList>(
-                     S => S.HasOne(DS => DS.Dimmer)
+                .UsingEntity<RelaySchedulerList>(
+                     S => S.HasOne(DS => DS.Relay)
                     .WithMany()
-                    .HasForeignKey(DS => DS.DimmerId),
+                    .HasForeignKey(DS => DS.RelayId),
 
                     S => S.HasOne(DS => DS.Scheduler)
                     .WithMany()
@@ -172,7 +172,7 @@ namespace LSys_Domain
 
                     DS =>
                     {
-                        DS.HasKey(x => new { x.SchedulerId, x.DimmerId });
+                        DS.HasKey(x => new { x.SchedulerId, x.RelayId });
                     });
 
                 EB.Property(Sch => Sch.Name).HasMaxLength(50);

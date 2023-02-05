@@ -17,6 +17,6 @@ namespace LSys_Domain.Entities.Schedulers
         public DateTime? TimeOfDay { get; set; } // godzina wykonania
         public ActionType ActionType { get; set; } // Typ akcji: włącz, wyłącz, itd.
         public float SetValue { get; set; } // Wartość jaka ma zostać ustawiona na dimmerze
-        public List<Dimmer> Dimmers { get; set; }
+        public List<Relay> Relays { get; set; }
     }
 }
