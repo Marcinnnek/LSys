@@ -22,8 +22,14 @@ namespace LSys.Services
 
         public async Task<IEnumerable<DeviceDTO>> GetDevices()
         {
-            var allDevices = _unitOfWork.Devices.GetAll();
+            var allDevices = _unitOfWork.Devices.GetAllDevicesWithRelays();
             return allDevices;
+        }
+        public async Task<DeviceDTO> GetDeviceWithIncludeAsNO(Guid id)
+        {
+            var device = _mapper.Map<DeviceDTO>(_unitOfWork.Devices.GetDeviceWithIncludeAsNO(id));
+
+            return device;
         }
 
         public async Task<GetDeviceVM> GetDevice(Guid id)
@@ -55,9 +61,9 @@ namespace LSys.Services
             await _unitOfWork.Complete();
         }
 
-        public async Task UpdateDevice(UpdateDeviceVM deviceVM)
+        public async Task UpdateDevice(DeviceDTO deviceDTO)
         {
-            var deviceDTO = _mapper.Map<DeviceDTO>(deviceVM);
+            //var deviceDTO = _mapper.Map<DeviceDTO>(deviceVM);
             _unitOfWork.Devices.Update(deviceDTO);
             await _unitOfWork.Complete();
         }

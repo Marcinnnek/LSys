@@ -11,5 +11,8 @@ namespace LSys_DataAccess.Repository_Interfaces
     public interface IDeviceRepository :IRepository<Device, DeviceDTO, Guid>
     {
         public DeviceDTO GetByIdAsNoTracking(Guid Id);
+        public DeviceDTO GetDeviceWithIncludeAsNO(Guid Id);
+        IEnumerable<DeviceDTO> GetAllDevicesWithRelays();
+
     }
 }

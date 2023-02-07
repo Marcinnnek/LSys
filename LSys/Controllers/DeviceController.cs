@@ -3,6 +3,12 @@ using LSys.Services;
 using LSys.View_Models;
 using LSys_DataAccess.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
+using MQTTnet.Client;
+using MQTTnet;
+using MQTTnet.Server;
+using System.Diagnostics;
+using LSys_Domain.Entities;
 
 namespace LSys.Controllers
 {
@@ -13,6 +19,11 @@ namespace LSys.Controllers
 
         public DeviceController(IDeviceService deviceService, IMapper mapper)
         {
+            HostingEnvironment env = new HostingEnvironment();
+            env.ContentRootPath = Directory.GetCurrentDirectory();
+            env.EnvironmentName = "Development";
+
+
             _deviceService = deviceService;
             _mapper = mapper;
         }
@@ -47,25 +58,6 @@ namespace LSys.Controllers
             return View(deviceVM);
         }
 
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddWiFiCredentials([FromRoute] Guid Id, [FromBody] AddWiFiVM wifiVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _deviceService.AddWiFiCredentials(Id, wifiVM);
-        //        if (result == true)
-        //        {
-        //            return StatusCode(201);
-        //        }
-        //        else
-        //        {
-        //            return NoContent();
-        //        }
-        //    }
-        //    return NoContent();
-        //}
-
         [HttpGet("[controller]/Details/{Id}")]
         public async Task<IActionResult> Details([FromRoute] Guid id)
         {
@@ -97,8 +89,82 @@ namespace LSys.Controllers
         [HttpPost("[controller]/Update/{Id}")]
         public async Task<IActionResult> Update([FromForm] UpdateDeviceVM deviceVM)
         {
-            await _deviceService.UpdateDevice(deviceVM);
+            var deviceDTO = _mapper.Map<DeviceDTO>(deviceVM);
+            await _deviceService.UpdateDevice(deviceDTO);
             return RedirectToAction("Index");
+        }
+
+
+        [HttpPost("[controller]/SetRelay")]
+        public async Task<IActionResult> SetRelay([FromForm] SetRelays deviceRS)
+        {
+            var client = GetClient("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest");
+
+            var device = await _deviceService.GetDeviceWithIncludeAsNO(deviceRS.Id);
+
+            var deviceLogin = device.MQTTCredentials.Login;
+
+            List<bool> relayState = new List<bool>() { deviceRS.FirstChannelState, deviceRS.SecondChannelState, deviceRS.ThirdChannelState, deviceRS.FourthChannelState };
+
+            for (int i = 0; i < relayState.Count; i++)
+            {
+                Debug.WriteLine($"Relay state: {relayState[i]}");
+                await PublishMessageAsync($"RL{(i+1):00}{(relayState[i]?1:0):0000}", client, deviceLogin);
+            }
+
+            device.Relays[0].FirstChannelState = deviceRS.FirstChannelState;
+            device.Relays[0].SecondChannelState = deviceRS.SecondChannelState;
+            device.Relays[0].ThirdChannelState = deviceRS.ThirdChannelState;
+            device.Relays[0].FourthChannelState = deviceRS.FourthChannelState;
+            await _deviceService.UpdateDevice(device);
+
+
+
+            return RedirectToAction("Index");
+        }
+
+        public IMqttClient GetClient(string clientId, string serverIp, string port, string clientLogin, string clientPassword)
+        {
+            IMqttClient _client;
+            var mqttFactory = new MqttFactory();
+            _client = mqttFactory.CreateMqttClient();
+            var clientOptions = new MqttClientOptionsBuilder()
+                .WithClientId(clientId)
+                .WithTcpServer(serverIp)
+                .WithCleanSession()
+                .WithWillRetain()
+                .WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce)
+                .WithCredentials(clientLogin, clientPassword)
+                .Build();
+
+            _client.ConnectAsync(clientOptions).Wait();
+
+            return _client;
+        }
+
+        public async Task PublishMessageAsync(string payload, IMqttClient client, string topicPart)
+        {
+            string topic = $"DimmerSettings.{topicPart}";
+
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(payload)
+                .WithRetainFlag(true)
+                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
+                .Build();
+
+            if (client.IsConnected)
+            {
+                await client.PublishAsync(message);
+            }
+            else
+            {
+                await client.ReconnectAsync();
+                if (client.IsConnected)
+                {
+                    await client.PublishAsync(message);
+                }
+            }
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IMQTTHandler
     {
-        Task PublishMessageAsync(string payload);
+        //Task PublishMessageAsync(string payload);
     }
 }

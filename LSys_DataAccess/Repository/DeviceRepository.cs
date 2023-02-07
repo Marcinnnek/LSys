@@ -18,9 +18,23 @@ namespace LSys_DataAccess.Repository
         {
         }
 
+
+        public IEnumerable<DeviceDTO> GetAllDevicesWithRelays()
+        {
+            var dbEntities = _dbContext.Devices.Include(d => d.Relays);
+            var result = _mapper.Map<IEnumerable<Device>, IEnumerable<DeviceDTO>>(dbEntities);
+            return result;
+        }
+
         public DeviceDTO GetByIdAsNoTracking(Guid Id)
         {
             DeviceDTO deviceDTO = _mapper.Map<DeviceDTO>(_dbContext.Devices.AsNoTracking().FirstOrDefault(d => d.Id == Id));
+            return deviceDTO;
+        }
+
+        public DeviceDTO GetDeviceWithIncludeAsNO(Guid Id)
+        {
+            DeviceDTO deviceDTO = _mapper.Map<DeviceDTO>(_dbContext.Devices.Include(d=>d.Relays).Include(d=>d.MQTTCredentials).AsNoTracking().FirstOrDefault(d => d.Id == Id));
             return deviceDTO;
         }
     }

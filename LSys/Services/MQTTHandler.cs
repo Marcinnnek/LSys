@@ -36,30 +36,31 @@ namespace LSys.Services
 
 
 
-        public async Task PublishMessageAsync(string payload)
-        {
-            //string messagePayload = $"Test Message {DateTime.Now}";
-            string messagePayload = $"RL010000";
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic("DimmerSettings.ESP_1")
-                .WithPayload(messagePayload)
-                .WithRetainFlag(true)
-                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
-                .Build();
+        //public async Task PublishMessageAsync(string payload)
+        //{
+        //    //string messagePayload = $"Test Message {DateTime.Now}";
+        //    //string messagePayload = $"RL010000";
 
-            if (_client.IsConnected)
-            {
-                await _client.PublishAsync(message);
-            }
-            else
-            {
-                await _client.ReconnectAsync();
-                if (_client.IsConnected)
-                {
-                    await _client.PublishAsync(message);
-                }
-            }
-        }
+        //    var message = new MqttApplicationMessageBuilder()
+        //        .WithTopic("DimmerSettings.ESP_1")
+        //        .WithPayload(payload)
+        //        .WithRetainFlag(true)
+        //        .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
+        //        .Build();
+
+        //    if (_client.IsConnected)
+        //    {
+        //        await _client.PublishAsync(message);
+        //    }
+        //    else
+        //    {
+        //        await _client.ReconnectAsync();
+        //        if (_client.IsConnected)
+        //        {
+        //            await _client.PublishAsync(message);
+        //        }
+        //    }
+        //}
 
         public static async Task<string> RecieveMessage(MqttApplicationMessageReceivedEventArgs payload)
         {
