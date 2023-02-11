@@ -71,7 +71,9 @@ namespace LSys_DataAccess.Repository
         public void Update(TInput entity)
         {
             var result = _mapper.Map<TResult>(entity);
+            //_dbContext.Attach(result);
             _dbSet.Update(result);
+            //_dbContext.SaveChanges();
         }
 
         private object? GetIdFromObj(object obj)

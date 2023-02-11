@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LSys_DataAccess.Repository
 {
@@ -16,6 +17,14 @@ namespace LSys_DataAccess.Repository
     {
         public MQTTCredentialsRepository(LSysDbContext _DbContext, IMapper mapper) : base(_DbContext, mapper)
         {
+        }
+
+        public MQTTCredentialsDTO GetMQTTCredentiaslsByLogin(string login)
+        {
+            var dbEntity = _dbContext.MQTTCredentials.FirstOrDefault(x => x.Login == login);
+            var mqttCDTO = _mapper.Map<MQTTCredentialsDTO>(dbEntity);
+               
+            return mqttCDTO;
         }
 
     }

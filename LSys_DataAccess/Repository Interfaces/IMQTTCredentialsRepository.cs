@@ -11,5 +11,7 @@ namespace LSys_DataAccess.Repository_Interfaces
 {
     public  interface IMQTTCredentialsRepository : IRepository<MQTTCredentials, MQTTCredentialsDTO, Guid>
     {
+
+        public MQTTCredentialsDTO GetMQTTCredentiaslsByLogin(string login);
     }
 }

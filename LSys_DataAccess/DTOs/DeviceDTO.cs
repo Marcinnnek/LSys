@@ -21,7 +21,7 @@ namespace LSys_DataAccess.DTOs
         public Guid? MQTTCredentialsId { get; set; }
         public MQTTCredentialsDTO MQTTCredentials { get; set; }
         //public List<UserDTO> Users { get; set; }
-        public List<SensorDTO> Sensors { get; set; } = new List<SensorDTO>();
-        public List<RelayDTO> Relays { get; set; } = new List<RelayDTO>();
+        public List<SensorDTO> Sensors { get; set; }
+        public List<RelayDTO> Relays { get; set; }
     }
 }

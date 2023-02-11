@@ -98,7 +98,8 @@ namespace LSys.Controllers
         [HttpPost("[controller]/SetRelay")]
         public async Task<IActionResult> SetRelay([FromForm] SetRelays deviceRS)
         {
-            var client = GetClient("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest");
+            //_deviceService.SetRelay(deviceRS);
+            var client = _deviceService.GetMqttClient().Result;
 
             var device = await _deviceService.GetDeviceWithIncludeAsNO(deviceRS.Id);
 
@@ -117,7 +118,6 @@ namespace LSys.Controllers
             device.Relays[0].ThirdChannelState = deviceRS.ThirdChannelState;
             device.Relays[0].FourthChannelState = deviceRS.FourthChannelState;
             await _deviceService.UpdateDevice(device);
-
 
 
             return RedirectToAction("Index");

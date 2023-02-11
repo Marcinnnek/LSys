@@ -17,9 +17,11 @@ namespace LSys
         public static void Main(string[] args)
         {
             // var authenticationSettings = new AuthenticationSettings();
+            var mqttSettings = new MQTTSettings();
 
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddSingleton(mqttSettings);
+            builder.Configuration.GetSection("MQTTSettings").Bind(mqttSettings);
 
             builder.Services.AddAuthorization();
             builder.Services.AddControllersWithViews();
@@ -30,10 +32,8 @@ namespace LSys
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 
-
-
-            //builder.Services.AddSingleton<IMQTTHandler>(x=>new MQTTHandler("MQTTAdminUser","192.168.1.200", "1883", "MQTTAdminUser","usertest"));
-            builder.Services.AddHostedService<MQTTHandler>(x => new MQTTHandler("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest"));
+            //builder.Services.AddHostedService<MQTTHandler>();
+            builder.Services.AddSingleton<MQTTHandler>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDeviceService, DeviceService>();
             builder.Services.AddScoped<IMQTTService, MQTTService>();
