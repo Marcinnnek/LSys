@@ -64,16 +64,12 @@ namespace LSys_DataAccess.Repository
         {
             TResult dbEntity = _dbSet.Find(Id);
             _dbContext.Set<TResult>().Remove(dbEntity);
-            //TResult result = _mapper.Map<TResult>(entity);
-            //_dbContext.Set<TResult>().Remove(result);
         }
 
         public void Update(TInput entity)
         {
             var result = _mapper.Map<TResult>(entity);
-            //_dbContext.Attach(result);
             _dbSet.Update(result);
-            //_dbContext.SaveChanges();
         }
 
         private object? GetIdFromObj(object obj)

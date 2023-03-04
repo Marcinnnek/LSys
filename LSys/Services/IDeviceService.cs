@@ -13,8 +13,7 @@ namespace LSys.Services
         Task<DbResult<DeviceDTO>> AddNewDevice(AddDeviceVM deviceVM);
         Task DeleteDevice(Guid id);
         Task UpdateDevice(DeviceDTO deviceDTO);
-        //void SetRelay(SetRelays deviceRS);
         Task<IMqttClient> GetMqttClient();
-        //Task<bool> AddWiFiCredentials(Guid deviceId, AddWiFiVM wifiVM);
+
     }
 }

@@ -22,44 +22,16 @@ namespace LSys.Services
             _serviceProvider = serviceProvider;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            //_mqttHandler = new MQTTHandler("MQTTAdminUser", "192.168.1.200", "1883", "MQTTAdminUser", "usertest");
             _mqttHandler = _serviceProvider.GetRequiredService<MQTTHandler>();
         }
 
-        public async Task<IMqttClient>GetMqttClient()
+        public async Task<IMqttClient> GetMqttClient()
         {
             var client = _mqttHandler.ClientMQTT;
             return client;
         }
-            //public async void GetMqttClient(SetRelays deviceRS)
-            //{
 
-            //    var client = _mqttHandler.ClientMQTT;
-
-            //    var device =   _unitOfWork.Devices.GetDeviceWithIncludeAsNO(deviceRS.Id);
-
-            //    var deviceLogin = device.MQTTCredentials.Login;
-
-            //    List<bool> relayState = new List<bool>() { deviceRS.FirstChannelState, deviceRS.SecondChannelState, deviceRS.ThirdChannelState, deviceRS.FourthChannelState };
-
-            //    for (int i = 0; i < relayState.Count; i++)
-            //    {
-            //        Debug.WriteLine($"Relay state: {relayState[i]}");
-            //        MQTTHandler.PublishMessageAsync($"RL{(i + 1):00}{(relayState[i] ? 1 : 0):0000}", client, deviceLogin);
-            //    }
-
-            //    device.Relays[0].FirstChannelState = deviceRS.FirstChannelState;
-            //    device.Relays[0].SecondChannelState = deviceRS.SecondChannelState;
-            //    device.Relays[0].ThirdChannelState = deviceRS.ThirdChannelState;
-            //    device.Relays[0].FourthChannelState = deviceRS.FourthChannelState;
-
-            //    _unitOfWork.Devices.Update(device);
-            //    await _unitOfWork.Complete();
-
-
-            //}
-
-            public async Task<IEnumerable<DeviceDTO>> GetDevices()
+        public async Task<IEnumerable<DeviceDTO>> GetDevices()
         {
             var allDevices = _unitOfWork.Devices.GetAllDevicesWithRelays();
             await _unitOfWork.Complete();

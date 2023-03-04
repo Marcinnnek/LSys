@@ -7,9 +7,11 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Channels;
 // ESP_2 usertest
+// Add method for subscribe all devices and adding new topics
+
 namespace LSys.Services
 {
-    public class MQTTHandler : IMQTTHandler
+    public class MQTTHandler
     {
         private IMqttClient _client;
         private readonly IUnitOfWork _unitOfWork;
@@ -60,18 +62,6 @@ namespace LSys.Services
 
             return message;
         }
-
-        //protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        //{
-        //    //_client.IsConnected
-        //    if (stoppingToken.IsCancellationRequested)
-        //    {
-
-        //        return Task.CompletedTask;
-        //    }
-        //    return Task.CompletedTask;
-
-        //}
 
         public IMqttClient GetClient(string clientId, string serverIp, string port, string clientLogin, string clientPassword)
         {

@@ -32,6 +32,11 @@
   <ItemGroup>
     <ProjectReference Include="..\LSys_DataAccess\LSys_DataAccess.csproj" />
     <ProjectReference Include="..\LSys_DB\LSys_DB.csproj" />
+
   </ItemGroup>
 
+<ItemGroup>
+	<InternalsVisibleTo Include="LSys_TEST" />
+</ItemGroup>
+	
 </Project>
